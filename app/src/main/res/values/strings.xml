@@ -4,4 +4,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_settings">Settings</string>
     <string name="my_map_api_key">AIzaSyC_2pypRUBu-_Gfhz8ZpVJT92V9JuTg4DE</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="host">http://34.126.72.94:3000/api</string>
 </resources>

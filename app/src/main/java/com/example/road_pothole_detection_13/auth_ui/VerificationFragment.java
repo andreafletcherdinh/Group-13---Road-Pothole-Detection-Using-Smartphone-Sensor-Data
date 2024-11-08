@@ -8,7 +8,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.os.CountDownTimer;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,12 +89,12 @@ public class VerificationFragment extends Fragment {
         TextView emailTextView = view.findViewById(R.id.emailTextView);
         emailTextView.setText(email);
 
+        EditText numberEditText = view.findViewById(R.id.editTextNumber);
         Button verifyButton = view.findViewById(R.id.verifyButton);
         verifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Integer code;
-                EditText numberEditText = view.findViewById(R.id.editTextNumber);
                 try {
                     code = Integer.parseInt(numberEditText.getText().toString().trim());
                 } catch (NumberFormatException e) {
@@ -125,6 +127,41 @@ public class VerificationFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getParentFragmentManager().popBackStack();
+            }
+        });
+
+        // Check numberEditText
+        numberEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (TextUtils.isEmpty(numberEditText.getText())) {
+                        numberEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                    }
+                    else {
+                        numberEditText.setBackgroundResource(R.drawable.rounded_border);
+                    }
+                }
+            }
+        });
+        numberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() != 6) {
+                    numberEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                } else {
+                    numberEditText.setBackgroundResource(R.drawable.rounded_border);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

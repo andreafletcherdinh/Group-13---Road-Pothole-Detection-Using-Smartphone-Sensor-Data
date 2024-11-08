@@ -8,6 +8,9 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,13 +84,13 @@ public class ResetPasswordFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EditText passwordEditText = view.findViewById(R.id.editTextTextPassword3);
+        EditText confirmedPasswordEditText = view.findViewById(R.id.editTextTextConfirmPassword2);
         Button confirmButton = view.findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText passwordEditText = view.findViewById(R.id.editTextTextPassword3);
                 String password = passwordEditText.getText().toString().trim();
-                EditText confirmedPasswordEditText = view.findViewById(R.id.editTextTextConfirmPassword2);
                 String confirmedPassword = confirmedPasswordEditText.getText().toString().trim();
 
                 confirm(view, password, confirmedPassword);
@@ -105,6 +108,77 @@ public class ResetPasswordFragment extends Fragment {
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                 transaction.replace(R.id.nav_host_fragment_auth, new LoginFragment());
                 transaction.commit();
+            }
+        });
+
+        // Check passwordEditText
+        passwordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (TextUtils.isEmpty(passwordEditText.getText().toString().trim())) {
+                        passwordEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                        passwordEditText.setError("Password must not be empty");
+                    }
+                }
+            }
+        });
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    passwordEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                    passwordEditText.setError("Password must not be empty");
+                } else {
+                    passwordEditText.setBackgroundResource(R.drawable.rounded_border);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        // Check confirmedPasswordEditText
+        confirmedPasswordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (TextUtils.isEmpty(confirmedPasswordEditText.getText().toString().trim())) {
+                        confirmedPasswordEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                        confirmedPasswordEditText.setError("Password must not be empty");
+                    }
+                }
+            }
+        });
+        confirmedPasswordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    confirmedPasswordEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                    confirmedPasswordEditText.setError("Confirmed password must not be empty");
+                } if (!s.toString().equals(passwordEditText.getText().toString())) {
+                    confirmedPasswordEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                    confirmedPasswordEditText.setError("Confirmed password must be matched");
+                } else {
+                    confirmedPasswordEditText.setBackgroundResource(R.drawable.rounded_border);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

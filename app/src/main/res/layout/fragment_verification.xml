@@ -113,7 +113,6 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:background="@drawable/rounded_border"
-            android:backgroundTint="#D9D9D9"
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="number"

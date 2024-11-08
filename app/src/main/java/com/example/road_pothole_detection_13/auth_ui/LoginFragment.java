@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.Settings;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,16 +118,87 @@ public class LoginFragment extends Fragment {
         });
 
         // Login
+        EditText emailEditText = view.findViewById(R.id.editTextTextEmailAddress);
+        EditText passwordEditText = view.findViewById(R.id.editTextTextPassword);
         Button logInButton = view.findViewById(R.id.logInButton);
         logInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText emailEditText = view.findViewById(R.id.editTextTextEmailAddress);
                 String email = emailEditText.getText().toString().trim();
-                EditText passwordEditText = view.findViewById(R.id.editTextTextPassword);
                 String password = passwordEditText.getText().toString().trim();
 
                 logIn(view, email, password);
+            }
+        });
+
+        // Email Text View check
+        emailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (TextUtils.isEmpty(emailEditText.getText().toString().trim())) {
+                        emailEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                        emailEditText.setError("Email address must not be empty");
+                    }
+                }
+            }
+        });
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                 if (TextUtils.isEmpty(s)) {
+                    emailEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                    emailEditText.setError("Email address must not be empty");
+                 } if (!isValidEmail(s.toString())) {
+                    emailEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                    emailEditText.setError("Email address is invalid");
+                 } else {
+                    emailEditText.setBackgroundResource(R.drawable.rounded_border);
+                 }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        // Password Text View check
+        passwordEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (TextUtils.isEmpty(passwordEditText.getText().toString().trim())) {
+                        passwordEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                        passwordEditText.setError("Password must not be empty");
+                    }
+                }
+            }
+        });
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    passwordEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                    passwordEditText.setError("Password must not be empty");
+                } else {
+                    passwordEditText.setBackgroundResource(R.drawable.rounded_border);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
@@ -245,6 +318,7 @@ public class LoginFragment extends Fragment {
 
             } else if (result.first == 401) {
                 showDialog("Alert", "Your email or password are incorrect! Please try again");
+
             } else {
                 showDialog("Alert", "Something went wrong, please try again later.");
             }

@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.Settings;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,11 +91,11 @@ public class ForgotPasswordFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        EditText emailEditText = view.findViewById(R.id.editTextTextEmailAddress3);
         Button sendCodeButton = view.findViewById(R.id.sendCodeButton);
         sendCodeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText emailEditText = view.findViewById(R.id.editTextTextEmailAddress3);
                 String email = emailEditText.getText().toString().trim();
                 sendCode(view, email);
             }
@@ -104,6 +106,43 @@ public class ForgotPasswordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 getParentFragmentManager().popBackStack();
+            }
+        });
+
+        // Check emailEditText
+        emailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (TextUtils.isEmpty(emailEditText.getText().toString().trim())) {
+                        emailEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                        emailEditText.setError("Email address must not be empty");
+                    }
+                }
+            }
+        });
+        emailEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s)) {
+                    emailEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                    emailEditText.setError("Email address must not be empty");
+                } if (!isValidEmail(s.toString())) {
+                    emailEditText.setBackgroundResource(R.drawable.red_rounded_border);
+                    emailEditText.setError("Email address is invalid");
+                } else {
+                    emailEditText.setBackgroundResource(R.drawable.rounded_border);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

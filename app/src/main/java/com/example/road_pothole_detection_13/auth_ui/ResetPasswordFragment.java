@@ -134,6 +134,7 @@ public class ResetPasswordFragment extends Fragment {
     private void confirm(View view, String password, String confirmedPassword) {
         if (!password.equals(confirmedPassword)) {
             showDialog("Alert", "Confirmed password must be matched");
+            return;
         }
         new confirmTask(password).execute(getString(R.string.host) + "/auth/reset-password?token=" + resetPasswordToken);
     }

@@ -2,7 +2,6 @@ import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.
 
 plugins {
     alias(libs.plugins.android.application)
-
 }
 
 android {
@@ -46,7 +45,6 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
-    implementation(libs.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -69,10 +67,8 @@ dependencies {
     implementation  ("org.mapsforge:sqlite-android:0.18.0:natives-arm64-v8a")
     implementation  ("org.mapsforge:sqlite-android:0.18.0:natives-x86")
     implementation  ("org.mapsforge:sqlite-android:0.18.0:natives-x86_64")
-
-
-
-
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation ("com.google.android.gms:play-services-location:21.0.1")
 
 
 }

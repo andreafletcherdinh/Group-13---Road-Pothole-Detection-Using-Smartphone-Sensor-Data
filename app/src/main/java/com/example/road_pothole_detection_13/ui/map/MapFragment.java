@@ -1,102 +1,138 @@
 package com.example.road_pothole_detection_13.ui.map;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.road_pothole_detection_13.databinding.FragmentMapBinding;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
-import org.mapsforge.core.model.LatLong;
-import org.mapsforge.map.android.graphics.AndroidGraphicFactory;
-import org.mapsforge.map.android.util.AndroidUtil;
-import org.mapsforge.map.layer.renderer.TileRendererLayer;
-import org.mapsforge.map.reader.MapFile;
-import org.mapsforge.map.rendertheme.InternalRenderTheme;
+import com.example.road_pothole_detection_13.R;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.List;
 
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    private static final LatLong BERLIN = new LatLong(52.5200, 13.4050);
-    private static final LatLong ALABAMA = new LatLong(32.3182, 86.9023);
+    private GoogleMap map;
+    private FusedLocationProviderClient fusedLocationClient;
+    private Location currentLocation;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-    private FragmentMapBinding b;
-
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the fragment's layout
-        b = FragmentMapBinding.inflate(inflater, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        Button btnNavigation = view.findViewById(R.id.btnNavi);
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
-        // Initialize AndroidGraphicFactory
-        AndroidGraphicFactory.createInstance(requireActivity().getApplication());
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
-        // Register the result contract for opening the map file
-        ActivityResultLauncher<Intent> contract = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>() {
-                    @Override
-                    public void onActivityResult(ActivityResult result) {
-                        if (result.getData() != null) {
-                            Uri uri = result.getData().getData();
-                            if (uri != null) {
-                                openMap(uri);
-                            }
-                        }
-                    }
-                });
+        SearchView searchView = view.findViewById(R.id.search_view);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchLocation(query);
+                return false;
+            }
 
-        // Set up the button click listener
-        b.openmap.setOnClickListener(view -> {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.setType("*/*");
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            contract.launch(intent);
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
         });
 
-        // Return the root view of the fragment
-        return b.getRoot();
+        view.findViewById(R.id.btn_current_location).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getCurrentLocation();
+            }
+        });
+
+        return view;
     }
 
-    // Function to open the map using the selected Uri
-    public void openMap(Uri uri) {
-        b.map.getMapScaleBar().setVisible(true);
-        b.map.setBuiltInZoomControls(true);
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        map = googleMap;
+        getCurrentLocation();
+    }
 
-        AndroidUtil.TileCache cache = AndroidUtil.createTileCache(
-                requireContext(),
-                "mycache",
-                b.map.getModel().getDisplayModel().getTileSize(),
-                1f,
-                b.map.getModel().getFrameBufferModel().getOverdrawFactor()
-        );
+    private void getCurrentLocation() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            fusedLocationClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        currentLocation = location;
+                        updateMapLocation();
+                    } else {
+                        Toast.makeText(requireContext(), "Unable to get current location", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } else {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
 
-        try (FileInputStream stream = (FileInputStream) requireActivity().getContentResolver().openInputStream(uri)) {
-            MapFile mapStore = new MapFile(stream);
+    private void searchLocation(String query) {
+        Geocoder geocoder = new Geocoder(requireContext());
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(query, 1);
+            if (addresses != null && !addresses.isEmpty()) {
+                Address address = addresses.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                map.addMarker(new MarkerOptions().position(latLng).title(query));
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+            } else {
+                Toast.makeText(requireContext(), "Location not found", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            Toast.makeText(requireContext(), "Error searching location", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-            TileRendererLayer renderLayer = new TileRendererLayer(
-                    cache,
-                    mapStore,
-                    b.map.getModel().getMapViewPosition(),
-                    AndroidGraphicFactory.INSTANCE
-            );
+    private void updateMapLocation() {
+        if (currentLocation != null) {
+            LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+            map.clear();
+            map.addMarker(new MarkerOptions().position(latLng).title("Current Location"));
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+        }
+    }
 
-            renderLayer.setXmlRenderTheme(InternalRenderTheme.DEFAULT);
-
-            b.map.getLayerManager().getLayers().add(renderLayer);
-
-            b.map.setCenter(BERLIN);
-            b.map.setZoomLevel((byte) 10);
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getCurrentLocation();
+            } else {
+                Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

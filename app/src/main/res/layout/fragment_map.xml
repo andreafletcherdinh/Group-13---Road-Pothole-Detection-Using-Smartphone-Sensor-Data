@@ -12,16 +12,21 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
-        android:queryHint="Search..."
-        android:iconifiedByDefault="false"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/bg_search_view"
+
         android:elevation="5dp"
-        android:background="@drawable/bg_search_view" />
+        android:gravity="center_horizontal"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search..." />
+
     <Button
         android:id="@+id/btn_current_location"
         android:layout_width="60dp"
@@ -31,4 +36,39 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="70dp"
         android:layout_marginEnd="16dp"/>
+
+    <EditText
+        android:id="@+id/source"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_view"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_search_view"
+        android:elevation="5dp"
+        android:gravity="center_horizontal"
+        android:hint="Enter source location"
+        android:selectAllOnFocus="false"
+        android:singleLine="false" />
+
+    <EditText
+        android:id="@+id/destination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/source"
+        android:layout_margin="10dp"
+        android:background="@drawable/bg_search_view"
+        android:elevation="5dp"
+        android:gravity="center_horizontal"
+        android:hint="Enter destination location" />
+
+    <Button
+        android:id="@+id/btnNavi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/destination"
+        android:layout_alignParentRight="true"
+        android:text="Navigation" />
+
+
+
 </RelativeLayout>

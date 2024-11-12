@@ -297,7 +297,7 @@ public class LoginFragment extends Fragment {
             dismissLoadingDialog();
 
             // Hiển thị dialog kết quả
-            if (result.first == 200) {
+            if (result.first == 201) {
                 // Xoá back stack
                 getParentFragmentManager().popBackStack(null, getParentFragmentManager().POP_BACK_STACK_INCLUSIVE);
 

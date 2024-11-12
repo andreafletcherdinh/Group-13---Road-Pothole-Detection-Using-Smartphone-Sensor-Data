@@ -234,7 +234,7 @@ public class ForgotPasswordFragment extends Fragment {
             dismissLoadingDialog();
 
             // Hiển thị dialog kết quả
-            if (result.first == 200) {
+            if (result.first == 201) {
 
                 // Thêm email làm args
                 args.putString("email", sentEmail);

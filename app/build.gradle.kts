@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+
 android {
     namespace = "com.example.road_pothole_detection_13"
     compileSdk = 34
@@ -36,6 +37,9 @@ android {
     }
 }
 
+
+
+
 dependencies {
 
     implementation(libs.appcompat)
@@ -50,8 +54,13 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
     implementation ("org.maplibre.gl:android-sdk:9.6.0")
+//   implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0")
+//  implementation ("com.graphhopper:graphhopper-core:10.0")
+//   implementation ("com.graphhopper:graphhopper-reader-osm:10.0")
+//  implementation ("com.graphhopper:graphhopper-web-api:10.0")
+
+
 
 
 

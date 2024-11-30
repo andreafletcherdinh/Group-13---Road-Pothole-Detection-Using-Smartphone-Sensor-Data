@@ -1,5 +1,7 @@
 package com.example.road_pothole_detection_13.ui.map;
 
+import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent
 ;
@@ -8,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,12 +27,16 @@ import androidx.fragment.app.Fragment;
 
 
 import com.example.road_pothole_detection_13.R;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.geojson.Polygon;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
@@ -37,8 +44,13 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+
+//import com.mapbox.mapboxsdk.plugins.annotation.Line;
+//import com.mapbox.mapboxsdk.plugins.annotation.LineManager;
+//import com.mapbox.mapboxsdk.plugins.annotation.LineOptions;
 import com.mapbox.mapboxsdk.style.layers.CircleLayer;
 import com.mapbox.mapboxsdk.style.layers.FillLayer;
+import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
@@ -52,6 +64,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -62,30 +75,59 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapFragment extends Fragment implements SensorEventListener {
 
     private static final String MBTILES_NAME = "maptest.mbtiles";
-
     private MapView mapView;
+//    private LineManager lineManager;
+    private MapboxMap mapboxMap;
     private MapboxMap map;
     private LatLngBounds bounds;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private double minZoomLevel;
     private SwitchCompat zoomSwitch;
+    private boolean hasLocationPermission() {
+        return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+    private void requestLocationPermission() {
+        if (!hasLocationPermission()) {
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, do your location logic here
 
+            } else {
+                // Permission denied, show a message
+                Toast.makeText(getContext(), "Location permission is required.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
     private SensorManager sensorManager;
     private Sensor accelerometer;
     private float[] gravity = new float[3];
     private float[] linear_acceleration = new float[3];
-    private static final float SHAKE_THRESHOLD = 2.5f; // Set your threshold for shake detection
+    private static final float SHAKE_THRESHOLD = 4.0f; // Set your threshold for shake detection
     private static final float ALPHA = 0.8f;
+    private static final float NOISE_THRESHOLD = 0.5f;
+    private long lastShakeTime = 0;
+    private static final int SHAKE_COOLDOWN_MS = 1000;
     private LocationManager locationManager;
     private Location lastKnownLocation;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Mapbox.getInstance(requireContext());
         // Initialize SensorManager
+        Mapbox.getInstance(requireContext());
         sensorManager = (SensorManager) requireActivity().getSystemService(Context.SENSOR_SERVICE);
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // Initialize LocationManager
@@ -102,6 +144,8 @@ public class MapFragment extends Fragment implements SensorEventListener {
                 e.printStackTrace();
             }
         }
+
+
     }
 
     @Nullable
@@ -137,6 +181,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
                 return false;
             });
         });
+
         btncurrentlocation.setOnClickListener(v -> {
             if (map != null) {
                 // Define the default location (replace with your desired coordinates)
@@ -159,7 +204,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapbox) {
-                map = mapbox;  // Now we have access to the MapboxMap object
+                map = mapbox;
             }
         });
         zoomInButton.setOnClickListener(v -> {
@@ -183,16 +228,32 @@ public class MapFragment extends Fragment implements SensorEventListener {
             }
         });
 
+
         return rootView;
     }
 
+    private void drawPolyline() {
+        // Ví dụ tọa độ cho polyline
+        List<LatLng> routePoints = new ArrayList<>();
+        routePoints.add(new LatLng(10.870360, 106.802575)); // Điểm A
+        routePoints.add(new LatLng(10.870460, 106.806575)); // Điểm B
+        routePoints.add(new LatLng(10.870360, 106.803575)); // Điểm C
+
+        // Thêm Polyline lên MapLibre
+        PolylineOptions polylineOptions = new PolylineOptions()
+                .addAll(routePoints) // Thêm tất cả các điểm vào polyline
+                .color(Color.BLUE)   // Đặt màu cho polyline
+                .width(5);           // Đặt độ dày cho polyline
+
+        map.addPolyline(polylineOptions); // Vẽ polyline trên bản đồ
+    }
     private void showMbTilesMap(File mbtilesFile) {
         try {
             InputStream styleJsonInputStream = requireContext().getAssets().open("bright.json");
             File dir = new File(requireContext().getFilesDir().getAbsolutePath());
             File styleFile = new File(dir, "bright.json");
             copyStreamToFile(styleJsonInputStream, styleFile);
-
+            requestLocationPermission();
             bounds = getLatLngBounds(mbtilesFile);
             minZoomLevel = getMinZoom(mbtilesFile);
 
@@ -208,14 +269,18 @@ public class MapFragment extends Fragment implements SensorEventListener {
             // Set the map style using the edited JSON file
             map.setStyle(new Style.Builder().fromUri(Uri.fromFile(styleFile).toString()), style -> {
                 // Define the initial location
-                LatLng targetLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()); // Replace with your coordinates
-                float zoomLevel = 15.0f; // Adjust the zoom level
+                LatLng targetLocation = new LatLng(35.12972888243833, 137.30017964781746);
+                if (lastKnownLocation != null) {
+                    targetLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()); // Replace with your coordinates
+                    float zoomLevel = 15.0f; // Adjust the zoom level
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(targetLocation, zoomLevel));
+                    addMarkerAtLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), R.drawable.marker_icon);
+                }
+                else {
+                    Log.e("MapFragment", "lastKnownLocation is null.");
+                }
+                drawPolyline();
 
-                // Center the map on the initial location
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(targetLocation, zoomLevel));
-
-                // Add marker for the initial location
-                addMarkerAtLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), R.drawable.marker_icon);
                 addMarkerAtLocation(10.870360, 106.802575, R.drawable.pothole_icon);
                 addMarkerAtLocation(10.870460, 106.806575, R.drawable.pothole_icon);
                 addMarkerAtLocation(10.870360, 106.803575, R.drawable.pothole_icon);
@@ -228,15 +293,21 @@ public class MapFragment extends Fragment implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            // Isolate gravity using a low-pass filter
-            gravity[0] = ALPHA * gravity[0] + (1 - ALPHA) * event.values[0];
-            gravity[1] = ALPHA * gravity[1] + (1 - ALPHA) * event.values[1];
-            gravity[2] = ALPHA * gravity[2] + (1 - ALPHA) * event.values[2];
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
 
-            // Remove gravity to get linear acceleration
-            linear_acceleration[0] = event.values[0] - gravity[0];
-            linear_acceleration[1] = event.values[1] - gravity[1];
-            linear_acceleration[2] = event.values[2] - gravity[2];
+            if (Math.abs(x) < NOISE_THRESHOLD) x = 0;
+            if (Math.abs(y) < NOISE_THRESHOLD) y = 0;
+            if (Math.abs(z) < NOISE_THRESHOLD) z = 0;
+
+            gravity[0] = ALPHA * gravity[0] + (1 - ALPHA) * x;
+            gravity[1] = ALPHA * gravity[1] + (1 - ALPHA) * y;
+            gravity[2] = ALPHA * gravity[2] + (1 - ALPHA) * z;
+
+            linear_acceleration[0] = x - gravity[0];
+            linear_acceleration[1] = y - gravity[1];
+            linear_acceleration[2] = z - gravity[2];
 
             float acceleration = (float) Math.sqrt(
                     Math.pow(linear_acceleration[0], 2) +
@@ -250,11 +321,34 @@ public class MapFragment extends Fragment implements SensorEventListener {
         }
     }
     private void handleShakeEvent() {
-        if (lastKnownLocation != null) {
-            addMarkerAtLocation(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude(), R.drawable.pothole_icon);
 
-        } else {
-            Log.e("MapFragment", "Shake detected, but no GPS location available.");
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastShakeTime > SHAKE_COOLDOWN_MS) {
+            lastShakeTime = currentTime;
+
+            if (lastKnownLocation != null) {
+                // Hiển thị thông báo xác nhận
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Xác nhận")
+                        .setMessage("Bạn có muốn lưu vị trí ổ gà này không?")
+                        .setPositiveButton("Có", (dialog, which) -> {
+                            // Lưu vị trí và thêm marker
+                            addMarkerAtLocation(
+                                    lastKnownLocation.getLatitude(),
+                                    lastKnownLocation.getLongitude(),
+                                    R.drawable.pothole_icon
+                            );
+                            Log.i("MapFragment", "Vị trí ổ gà đã được lưu.");
+                        })
+                        .setNegativeButton("Không", (dialog, which) -> {
+                            // Bỏ qua sự kiện
+                            Log.i("MapFragment", "Người dùng đã bỏ qua việc lưu vị trí ổ gà.");
+                        })
+                        .setCancelable(true)
+                        .show();
+            } else {
+                Log.e("MapFragment", "Shake detected, but no GPS location available.");
+            }
         }
     }
     private void addMarkerAtLocation(double lat, double lng,int icon) {
@@ -319,12 +413,21 @@ public class MapFragment extends Fragment implements SensorEventListener {
     }
 
     private double getMinZoom(File file) {
-        SQLiteDatabase db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, SQLiteDatabase.OPEN_READONLY);
-        Cursor cursor = db.query("metadata", new String[]{"name", "value"}, "name=?", new String[]{"minzoom"}, null, null, null);
-        cursor.moveToFirst();
-        double minZoom = Double.parseDouble(cursor.getString(1));
-        cursor.close();
-        db.close();
+        double minZoom = 0.0;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        try {
+            db = SQLiteDatabase.openDatabase(file.getAbsolutePath(), null, SQLiteDatabase.OPEN_READONLY);
+            cursor = db.query("metadata", new String[]{"value"}, "name=?", new String[]{"minzoom"}, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                minZoom = cursor.getDouble(0);
+            }
+        } catch (Exception e) {
+            Log.e("MapFragment", "Error reading min zoom level", e);
+        } finally {
+            if (cursor != null) cursor.close();
+            if (db != null) db.close();
+        }
         return minZoom;
     }
 
@@ -367,21 +470,29 @@ public class MapFragment extends Fragment implements SensorEventListener {
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Handle accuracy changes if necessary
     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        mapView.onStart();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+        sensorManager.unregisterListener(this);
+    }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (sensorManager != null) {
-            sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
-        }
+        mapView.onResume();
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_UI);
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (sensorManager != null) {
-            sensorManager.unregisterListener(this);
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
     }
 }
 

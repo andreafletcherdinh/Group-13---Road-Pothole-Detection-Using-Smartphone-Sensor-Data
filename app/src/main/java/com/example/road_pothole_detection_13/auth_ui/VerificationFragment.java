@@ -25,7 +25,6 @@ import com.example.road_pothole_detection_13.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:scrollbars="vertical"
     android:verticalScrollbarPosition="right"
-    tools:context=".ui.dashboard.DashboardFragment">
+    tools:context=".app_ui.dashboard.DashboardFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -129,8 +129,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="400dp"
                 android:layout_margin="20dp"
-                android:layout_marginTop="4dp"
                 android:background="@drawable/pink_rounded_border"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"

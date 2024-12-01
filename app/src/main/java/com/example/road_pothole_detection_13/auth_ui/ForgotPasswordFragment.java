@@ -2,14 +2,11 @@ package com.example.road_pothole_detection_13.auth_ui;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.road_pothole_detection_13.R;
 
@@ -234,7 +230,7 @@ public class ForgotPasswordFragment extends Fragment {
             dismissLoadingDialog();
 
             // Hiển thị dialog kết quả
-            if (result.first == 201) {
+            if (result.first == 200) {
 
                 // Thêm email làm args
                 args.putString("email", sentEmail);

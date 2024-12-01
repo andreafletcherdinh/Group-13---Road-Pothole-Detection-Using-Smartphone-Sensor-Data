@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.Settings;
 import android.text.Editable;
@@ -297,7 +296,7 @@ public class LoginFragment extends Fragment {
             dismissLoadingDialog();
 
             // Hiển thị dialog kết quả
-            if (result.first == 201) {
+            if (result.first == 200) {
                 // Xoá back stack
                 getParentFragmentManager().popBackStack(null, getParentFragmentManager().POP_BACK_STACK_INCLUSIVE);
 
@@ -315,6 +314,7 @@ public class LoginFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.putExtra("accessToken", accessToken);
                 startActivity(intent);
+                getActivity().finish();
 
             } else if (result.first == 401) {
                 showDialog("Alert", "Your email or password are incorrect! Please try again");

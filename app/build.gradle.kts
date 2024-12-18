@@ -55,6 +55,8 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
     implementation ("org.maplibre.gl:android-sdk:9.6.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
 //   implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0")
 //  implementation ("com.graphhopper:graphhopper-core:10.0")
 //   implementation ("com.graphhopper:graphhopper-reader-osm:10.0")

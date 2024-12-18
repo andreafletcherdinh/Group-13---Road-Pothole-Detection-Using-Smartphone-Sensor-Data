@@ -529,15 +529,22 @@ public class MapFragment extends Fragment implements SensorEventListener {
         }
     }
     private void startLocationUpdates() {
-        // Tạo Runnable để lấy vị trí mỗi 3 giây
         locationUpdater = new Runnable() {
             @Override
             public void run() {
                 if (map != null && lastKnownLocation != null  ) {
                     // Define the default location (replace with your desired coordinates)
+
                     LatLng defaultLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()); // Example location
                     addMarkerAtLocation(defaultLocation.getLatitude(), defaultLocation.getLongitude());
-                    handler.postDelayed(this, 1000);
+                    if (isNavigationModeEnabled) {
+                        CameraPosition position = new CameraPosition.Builder()
+                                .target(new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
+                                .zoom(18) // Giữ mức zoom hiện tại
+                                .build();
+                        map.animateCamera(CameraUpdateFactory.newCameraPosition(position));
+                    }
+                    handler.postDelayed(this, 500);
                 } else {
                     Log.e("MapFragment", "MapboxMap is not initialized.");
                 }

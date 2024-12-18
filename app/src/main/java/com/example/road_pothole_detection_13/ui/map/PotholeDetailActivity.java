@@ -31,26 +31,25 @@ public class PotholeDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pothole_detail);
 
-        // **FindViewById cho các thành phần**
-        RadioButton rbLight = findViewById(R.id.rb_light);
-        RadioButton rbModerate = findViewById(R.id.rb_moderate);
-        RadioButton rbSevere = findViewById(R.id.rb_severe);
+        // Thêm RadioGroup
+        RadioGroup radioGroup = findViewById(R.id.radio_group_pothole);
         Button btnSubmit = findViewById(R.id.btn_submit);
 
-        // **Thiết lập OnClickListener cho Button Submit**
+// Xử lý sự kiện cho nút Submit
         btnSubmit.setOnClickListener(v -> {
-            // Kiểm tra trạng thái của RadioButton
-            if (rbLight.isChecked()) {
+            int selectedId = radioGroup.getCheckedRadioButtonId(); // Lấy ID của RadioButton đã chọn
+
+            if (selectedId == R.id.rb_light) {
                 sendResult("Light");
-            } else if (rbModerate.isChecked()) {
+            } else if (selectedId == R.id.rb_moderate) {
                 sendResult("Moderate");
-            } else if (rbSevere.isChecked()) {
+            } else if (selectedId == R.id.rb_severe) {
                 sendResult("Severe");
             } else {
-                // Hiển thị thông báo nếu chưa chọn mức độ
                 Toast.makeText(this, "Please select a severity level", Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
     // **Hàm gửi kết quả về Activity trước đó**

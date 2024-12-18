@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" >
+        tools:layout_editor_absoluteY="0dp">
 
     </com.mapbox.mapboxsdk.maps.MapView>
 
@@ -100,8 +100,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="400dp"
-        android:visibility="gone"
         android:background="@drawable/bottom_border"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/mapView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,12 +114,24 @@
             android:background="@drawable/bottom_border"
             android:orientation="vertical">
 
+
             <ImageButton
                 android:id="@+id/btn_exitNavigation"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="end"
+                android:backgroundTint="#bba6f1"
                 android:background="@drawable/ic_close" />
+
+            <TextView
+                android:id="@+id/text_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|bottom"
+                android:text="Navigation"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#4d55fa"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -133,8 +145,7 @@
                     android:layout_height="80dp"
                     android:layout_margin="12dp"
                     android:background="@drawable/direction_border"
-                    android:backgroundTint="#bba6f1"
-                    />
+                    android:backgroundTint="#bba6f1" />
 
 
                 <Button
@@ -142,8 +153,8 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_margin="12dp"
-                    android:backgroundTint="#bba6f1"
-                    android:background="@drawable/navigation_border" />
+                    android:background="@drawable/navigation_border"
+                    android:backgroundTint="#bba6f1" />
             </LinearLayout>
         </LinearLayout>
 

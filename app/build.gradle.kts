@@ -45,31 +45,26 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.preference)
     implementation(libs.activity)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    implementation("com.google.android.gms:play-services-maps:18.1.0")
-    implementation("com.google.android.gms:play-services-location:21.3.0")
-    implementation("androidx.fragment:fragment-ktx:1.5.2")
+    implementation ("org.maplibre.gl:android-sdk:9.6.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation  ("org.mapsforge:mapsforge-core:0.18.0")
-    implementation  ("org.mapsforge:mapsforge-map:0.18.0")
-    implementation  ("org.mapsforge:mapsforge-map-reader:0.18.0")
-    implementation  ("org.mapsforge:mapsforge-themes:0.18.0")
-    implementation  ("net.sf.kxml:kxml2:2.3.0")
-    implementation  ("org.mapsforge:mapsforge-map-android:0.18.0")
-    implementation  ("com.caverock:androidsvg:1.4")
-    implementation  ("org.mapsforge:mapsforge-core:0.18.0")
-    implementation  ("org.mapsforge:mapsforge-poi:0.18.0")
-    implementation  ("org.mapsforge:mapsforge-poi-android:0.18.0")
-    implementation  ("org.mapsforge:sqlite-android:0.18.0")
-    implementation  ("org.mapsforge:sqlite-android:0.18.0:natives-armeabi-v7a")
-    implementation  ("org.mapsforge:sqlite-android:0.18.0:natives-arm64-v8a")
-    implementation  ("org.mapsforge:sqlite-android:0.18.0:natives-x86")
-    implementation  ("org.mapsforge:sqlite-android:0.18.0:natives-x86_64")
-    implementation("com.google.android.gms:play-services-maps:19.0.0")
-    implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+//  implementation ("com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0")
+//  implementation ("com.graphhopper:graphhopper-core:10.0")
+//  implementation ("com.graphhopper:graphhopper-reader-osm:10.0")
+//  implementation ("com.graphhopper:graphhopper-web-api:10.0")
+
+
+
+
+
+
+
+
 
 
 }

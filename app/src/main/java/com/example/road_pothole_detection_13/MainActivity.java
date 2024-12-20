@@ -3,6 +3,9 @@ package com.example.road_pothole_detection_13;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowInsets;
+import android.view.WindowInsetsController;
+import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -16,6 +19,8 @@ import com.example.road_pothole_detection_13.databinding.ActivityMainBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         });
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         // Get user info
         String url = "http://diddysfreakoffparty.online:3000/api/user/profile";

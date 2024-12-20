@@ -3,9 +3,8 @@
     <string name="title_map">Map</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_settings">Settings</string>
+    <string name="mapbox_access_token">sk.eyJ1IjoiZHVvbmdodW5nIiwiYSI6ImNtNDJrc2twaTAxbnAya3M3YXh3dmFmeGIifQ.L7mEK4v7CjQPij--KOlC0g</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="host">http://34.126.72.94:3000/api</string>
-    <string name="open_map">Open Map</string>
-    <string name="my_map_api_key">AIzaSyBFHofOJ4IF0EaFLuScsJvmlLxb80vTPoE</string>
 </resources>

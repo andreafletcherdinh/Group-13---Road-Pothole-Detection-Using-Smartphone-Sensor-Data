@@ -58,13 +58,9 @@ dependencies {
 //  implementation ("com.graphhopper:graphhopper-reader-osm:10.0")
 //  implementation ("com.graphhopper:graphhopper-web-api:10.0")
 
-
-
-
-
-
-
-
-
-
+    // Thêm một thư viện bên ngoài vào đồ án Pothole Detection.
+    // Cú pháp "com.github.User:Repo:Tag":
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }

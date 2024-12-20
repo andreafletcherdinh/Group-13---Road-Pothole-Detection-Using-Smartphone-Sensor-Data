@@ -1,5 +1,7 @@
 package com.example.road_pothole_detection_13;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -11,6 +13,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.road_pothole_detection_13.databinding.ActivityMainBinding;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,5 +43,60 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         getSupportActionBar().hide();
+
+        // Get user info
+        String url = "http://diddysfreakoffparty.online:3000/api/user/profile";
+        String token = getIntent().getStringExtra("accessToken");
+
+        NetworkUtils.sendGetRequestWithAuthorization(this, url, token, new NetworkUtils.ResponseCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    JSONObject dataJson = responseJson.getJSONObject("data");
+                    String fullName = dataJson.getString("fullName");
+                    String email = dataJson.getString("email");
+                    String photo = dataJson.getString("photo");
+                    String birthDay = dataJson.getString("birthDay");
+                    String gender = dataJson.getString("gender");
+                    String address = dataJson.getString("address");
+
+                    Intent intent = getIntent();
+                    intent.putExtra("fullName", fullName);
+                    intent.putExtra("email", email);
+                    intent.putExtra("photo", photo);
+                    intent.putExtra("birthDay", birthDay);
+                    intent.putExtra("gender", gender);
+                    intent.putExtra("address", address);
+                    intent.putExtra("accessToken", token);
+
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                showErrorDialog("Connection error", "Error message: " + errorMessage);
+            }
+        });
     }
+
+    private void showErrorDialog(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Try again", (dialog, which) -> {
+                    // Có thể gọi lại API ở đây nếu cần
+                    dialog.dismiss();
+                })
+                .setNegativeButton("Close", (dialog, which) -> {
+                    dialog.dismiss();
+                    finishAffinity();
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(false)
+                .show();
+    }
+
 }

@@ -116,6 +116,9 @@ public class ResetPasswordFragment extends Fragment {
                     if (TextUtils.isEmpty(passwordEditText.getText().toString().trim())) {
                         passwordEditText.setBackgroundResource(R.drawable.red_rounded_border);
                         passwordEditText.setError("Password must not be empty");
+
+                        Button confirmButton = view.findViewById(R.id.confirmButton);
+                        confirmButton.setEnabled(false);
                     }
                 }
             }
@@ -131,8 +134,14 @@ public class ResetPasswordFragment extends Fragment {
                 if (TextUtils.isEmpty(s)) {
                     passwordEditText.setBackgroundResource(R.drawable.red_rounded_border);
                     passwordEditText.setError("Password must not be empty");
+
+                    Button confirmButton = view.findViewById(R.id.confirmButton);
+                    confirmButton.setEnabled(false);
                 } else {
                     passwordEditText.setBackgroundResource(R.drawable.rounded_border);
+
+                    Button confirmButton = view.findViewById(R.id.confirmButton);
+                    confirmButton.setEnabled(true);
                 }
             }
 
@@ -150,6 +159,9 @@ public class ResetPasswordFragment extends Fragment {
                     if (TextUtils.isEmpty(confirmedPasswordEditText.getText().toString().trim())) {
                         confirmedPasswordEditText.setBackgroundResource(R.drawable.red_rounded_border);
                         confirmedPasswordEditText.setError("Password must not be empty");
+
+                        Button confirmButton = view.findViewById(R.id.confirmButton);
+                        confirmButton.setEnabled(false);
                     }
                 }
             }
@@ -165,11 +177,20 @@ public class ResetPasswordFragment extends Fragment {
                 if (TextUtils.isEmpty(s)) {
                     confirmedPasswordEditText.setBackgroundResource(R.drawable.red_rounded_border);
                     confirmedPasswordEditText.setError("Confirmed password must not be empty");
+
+                    Button confirmButton = view.findViewById(R.id.confirmButton);
+                    confirmButton.setEnabled(false);
                 } if (!s.toString().equals(passwordEditText.getText().toString())) {
                     confirmedPasswordEditText.setBackgroundResource(R.drawable.red_rounded_border);
                     confirmedPasswordEditText.setError("Confirmed password must be matched");
+
+                    Button confirmButton = view.findViewById(R.id.confirmButton);
+                    confirmButton.setEnabled(false);
                 } else {
                     confirmedPasswordEditText.setBackgroundResource(R.drawable.rounded_border);
+
+                    Button confirmButton = view.findViewById(R.id.confirmButton);
+                    confirmButton.setEnabled(true);
                 }
             }
 

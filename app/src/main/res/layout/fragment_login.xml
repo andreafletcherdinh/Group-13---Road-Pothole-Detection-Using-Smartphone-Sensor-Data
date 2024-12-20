@@ -26,6 +26,7 @@
             android:text="Email address"
             android:textColor="#000000"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,6 +39,7 @@
             android:ems="10"
             android:inputType="textEmailAddress"
             android:padding="20dp"
+            android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -51,6 +53,7 @@
             android:text="Password"
             android:textColor="#000000"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
 
@@ -63,6 +66,7 @@
             android:ems="10"
             android:inputType="textPassword"
             android:padding="20dp"
+            android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView9" />
@@ -74,6 +78,7 @@
             android:layout_margin="20dp"
             android:buttonTint="#4d5ffa"
             android:text="Remember me"
+            android:textColor="#000000"
             android:textColorLink="#4d5ffa"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +169,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
-            android:text="PLease sign in to your existed account"
+            android:text="Please sign in to your existed account"
             android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold"

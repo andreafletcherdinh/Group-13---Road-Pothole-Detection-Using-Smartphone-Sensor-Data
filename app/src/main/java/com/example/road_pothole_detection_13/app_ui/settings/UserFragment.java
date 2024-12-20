@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.road_pothole_detection_13.R;
 import com.example.road_pothole_detection_13.auth_ui.AuthActivity;
@@ -73,6 +74,9 @@ public class UserFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // Update data
+        updateData();
+
         // Account setting
         View account_layout = view.findViewById(R.id.account_layout);
         account_layout.setOnClickListener(new View.OnClickListener() {
@@ -133,8 +137,38 @@ public class UserFragment extends Fragment {
     }
 
     private void OpenSettingsHostActivity(String fragmentName) {
+        String fullName = getActivity().getIntent().getStringExtra("fullName");
+        String email = getActivity().getIntent().getStringExtra("email");
+        String photo = getActivity().getIntent().getStringExtra("photo");
+        String birthDay = getActivity().getIntent().getStringExtra("birthDay");
+        String gender = getActivity().getIntent().getStringExtra("gender");
+        String address = getActivity().getIntent().getStringExtra("address");
+        String token = getActivity().getIntent().getStringExtra("accessToken");
+
         Intent intent = new Intent(getActivity(), SettingsHostActivity.class);
         intent.putExtra("fragment", fragmentName);
+        intent.putExtra("fullName", fullName);
+        intent.putExtra("email", email);
+        intent.putExtra("photo", photo);
+        intent.putExtra("birthDay", birthDay);
+        intent.putExtra("gender", gender);
+        intent.putExtra("address", address);
+        intent.putExtra("accessToken", token);
         startActivity(intent);
     }
+
+    private void updateData() {
+        Intent intent = getActivity().getIntent();
+
+        // Name
+        String fullName = intent.getStringExtra("fullName");
+        TextView fullNameTextView = getView().findViewById(R.id.fullNameTextView);
+        fullNameTextView.setText(fullName);
+
+        // Avatar
+        String photo = intent.getStringExtra("photo");
+
+
+    }
+
 }

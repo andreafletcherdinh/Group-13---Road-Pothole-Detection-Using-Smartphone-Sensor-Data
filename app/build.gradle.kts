@@ -70,6 +70,8 @@ dependencies {
     implementation  ("org.mapsforge:sqlite-android:0.18.0:natives-x86_64")
     implementation("com.google.android.gms:play-services-maps:19.0.0")
     implementation ("com.google.android.gms:play-services-location:21.0.1")
+    // Thêm một thư viện bên ngoài vào đồ án Pothole Detection.
+    // Cú pháp "com.github.User:Repo:Tag": 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

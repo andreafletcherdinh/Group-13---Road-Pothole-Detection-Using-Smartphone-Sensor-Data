@@ -66,7 +66,7 @@
                     app:layout_constraintTop_toBottomOf="@id/dateTextView" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Biểu đồ 1 -->
+            <!-- Biểu đồ cột-->
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/barChartWithData"
                 android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                 android:background="#f0f0f0"
                 android:padding="8dp" />
 
-            <!-- Biểu đồ 2 -->
+            <!-- Biểu đồ tròn -->
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pieChartWithData"
                 android:layout_width="match_parent"

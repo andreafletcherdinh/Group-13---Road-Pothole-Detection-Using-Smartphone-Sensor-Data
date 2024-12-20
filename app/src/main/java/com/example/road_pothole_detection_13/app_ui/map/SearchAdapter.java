@@ -1,4 +1,4 @@
-package com.example.road_pothole_detection_13.ui.map;
+package com.example.road_pothole_detection_13.app_ui.map;
 
 import android.location.Location;
 import android.view.LayoutInflater;
@@ -14,8 +14,8 @@ import com.example.road_pothole_detection_13.R;
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
-    private List<LocationPlace> suggestions;
-    private OnItemClickListener listener;
+    private final List<LocationPlace> suggestions;
+    private final OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(LocationPlace location);

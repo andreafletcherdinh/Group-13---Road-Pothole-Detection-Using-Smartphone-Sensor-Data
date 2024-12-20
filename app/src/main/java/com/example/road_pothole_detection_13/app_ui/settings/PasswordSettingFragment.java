@@ -121,7 +121,7 @@ public class PasswordSettingFragment extends Fragment {
 
                     confirmBtn.setEnabled(false);
                 } else {
-                    currentPasswordEditText.setBackgroundResource(R.drawable.rounded_border);;
+                    currentPasswordEditText.setBackgroundResource(R.drawable.rounded_border);
 
                     confirmBtn.setEnabled(true);
                 }

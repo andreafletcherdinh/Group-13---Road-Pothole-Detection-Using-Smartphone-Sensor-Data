@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.text.Editable;
@@ -99,7 +100,7 @@ public class ResetPasswordFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Xoá back stack
-                getParentFragmentManager().popBackStack(null, getParentFragmentManager().POP_BACK_STACK_INCLUSIVE);
+                getParentFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                 // Chuyển về Login Fragment
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -232,7 +233,7 @@ public class ResetPasswordFragment extends Fragment {
     }
 
     private class confirmTask extends AsyncTask<String, Void, Pair<Integer, String>> {
-        private String password;
+        private final String password;
 
         // Constructor để truyền các giá trị động vào phần body
         public confirmTask(String password) {
@@ -282,7 +283,7 @@ public class ResetPasswordFragment extends Fragment {
                 showDialog("Success", "Reset password successfully. Please login.");
 
                 // Xoá back stack
-                getParentFragmentManager().popBackStack(null, getParentFragmentManager().POP_BACK_STACK_INCLUSIVE);
+                getParentFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                 // Chuyển về Login Fragment
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();

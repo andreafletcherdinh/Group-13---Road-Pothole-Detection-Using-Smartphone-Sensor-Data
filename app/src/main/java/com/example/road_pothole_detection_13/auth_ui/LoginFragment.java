@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.provider.Settings;
 import android.text.Editable;
@@ -243,8 +244,8 @@ public class LoginFragment extends Fragment {
     }
 
     private class logInTask extends AsyncTask<String, Void, Pair<Integer, String>> {
-        private String email;
-        private String password;
+        private final String email;
+        private final String password;
 
         // Constructor để truyền các giá trị động vào phần body
         public logInTask(String email, String password) {
@@ -298,7 +299,7 @@ public class LoginFragment extends Fragment {
             // Hiển thị dialog kết quả
             if (result.first == 200) {
                 // Xoá back stack
-                getParentFragmentManager().popBackStack(null, getParentFragmentManager().POP_BACK_STACK_INCLUSIVE);
+                getParentFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                 // Lấy ra AccessToken
                 String accessToken;

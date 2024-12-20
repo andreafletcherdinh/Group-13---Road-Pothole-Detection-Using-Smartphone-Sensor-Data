@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.Settings;
@@ -302,9 +303,9 @@ public class SignUpFragment extends Fragment {
     }
 
     private class signUpTask extends AsyncTask<String, Void, Pair<Integer, String>> {
-        private String name;
-        private String email;
-        private String password;
+        private final String name;
+        private final String email;
+        private final String password;
 
         // Constructor để truyền các giá trị động vào phần body
         public signUpTask(String name, String email, String password) {
@@ -362,7 +363,7 @@ public class SignUpFragment extends Fragment {
                 showDialog("Success", "Sign up successfully. Please login");
 
                 // Xoá back stack
-                getParentFragmentManager().popBackStack(null, getParentFragmentManager().POP_BACK_STACK_INCLUSIVE);
+                getParentFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
                 // Chuyển về Login Fragment
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();

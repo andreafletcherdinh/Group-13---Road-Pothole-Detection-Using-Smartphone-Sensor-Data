@@ -196,7 +196,7 @@ public class VerificationFragment extends Fragment {
     }
 
     private class verifyTask extends AsyncTask<String, Void, Pair<Integer, String>> {
-        private Integer code;
+        private final Integer code;
 
         // Constructor để truyền các giá trị động vào phần body
         public verifyTask(Integer code) {
@@ -279,7 +279,7 @@ public class VerificationFragment extends Fragment {
             @Override
             public void onTick(long millisUntilFinished) {
                 // Cập nhật TextView với số giây còn lại
-                counterTextView.setText("in " + String.valueOf(millisUntilFinished / 1000) + " seconds");
+                counterTextView.setText("in " + millisUntilFinished / 1000 + " seconds");
             }
 
             @Override
@@ -299,7 +299,7 @@ public class VerificationFragment extends Fragment {
     }
 
     private class sendCodetask extends AsyncTask<String, Void, Pair<Integer, String>> {
-        private String email;
+        private final String email;
 
         // Constructor để truyền các giá trị động vào phần body
         public sendCodetask(String email) {

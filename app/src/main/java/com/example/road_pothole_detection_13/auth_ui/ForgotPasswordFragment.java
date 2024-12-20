@@ -183,7 +183,7 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     private class sendCodetask extends AsyncTask<String, Void, Pair<Integer, String>> {
-        private String email;
+        private final String email;
 
         // Constructor để truyền các giá trị động vào phần body
         public sendCodetask(String email) {

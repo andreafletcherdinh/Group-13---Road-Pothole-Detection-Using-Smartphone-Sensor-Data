@@ -1,5 +1,6 @@
 package com.example.road_pothole_detection_13.app_ui.map;
 
+import com.example.road_pothole_detection_13.app_ui.map.*;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static androidx.core.content.ContextCompat.getCodeCacheDir;
@@ -141,8 +142,8 @@ public class MapFragment extends Fragment implements SensorEventListener {
     private Marker searchmarker;
     private SensorManager sensorManager;
     private Sensor accelerometer;
-    private float[] gravity = new float[3];
-    private float[] linear_acceleration = new float[3];
+    private final float[] gravity = new float[3];
+    private final float[] linear_acceleration = new float[3];
     private static final float LIGHT_SHAKE_THRESHOLD = 5.0f;
     private static final float MEDIUM_SHAKE_THRESHOLD = 8.0f;
     private static final float SEVERE_SHAKE_THRESHOLD = 12.0f; // Set your threshold for shake detection
@@ -153,17 +154,17 @@ public class MapFragment extends Fragment implements SensorEventListener {
     private LocationManager locationManager;
     private Location lastKnownLocation;
     private LatLng currentLocation = null;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private Runnable locationUpdater;
-    private List<LatLng> routePoints = new ArrayList<>();
-    private List<Polyline> polylines = new ArrayList<>();
-    private  List<LatLng> potholePoints = new ArrayList<>();
+    private final List<LatLng> routePoints = new ArrayList<>();
+    private final List<Polyline> polylines = new ArrayList<>();
+    private final List<LatLng> potholePoints = new ArrayList<>();
     private RecyclerView recyclerView;
     private SearchAdapter adapter;
     private static final int REQUEST_CODE = 1;
     private RelativeLayout layoutButtonGroup;
     private boolean isLayoutVisible = true;
-    private List<LocationPlace> suggestions = new ArrayList<>();
+    private final List<com.example.road_pothole_detection_13.app_ui.map.LocationPlace> suggestions = new ArrayList<>();
     private  Button directionButton;
     private Button navigationButton;
     private ImageButton exitNavigationButton;
@@ -556,7 +557,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
     }
 
 
-    private List<Feature> potholeFeatures = new ArrayList<>();
+    private final List<Feature> potholeFeatures = new ArrayList<>();
     private void initPotholeLayer(@NonNull Style style) {
         if (map != null) {
             // Tạo GeoJsonSource
@@ -686,7 +687,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
                     );
                     style.addLayer(pointLayer);
                 }
-                if (isLayoutVisible == true) {
+                if (isLayoutVisible) {
                     layoutButtonGroup.setVisibility(View.VISIBLE); // Hiện layout
                     isLayoutVisible = false;
                 }
@@ -721,7 +722,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
                 exitNavigationButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isLayoutVisible == false) {
+                        if (!isLayoutVisible) {
                             layoutButtonGroup.setVisibility(View.GONE); // Ẩn layout
                             isLayoutVisible = true;
                         }
@@ -750,7 +751,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
             Toast.makeText(getContext(), "Map is not ready yet!", Toast.LENGTH_SHORT).show();
         }
     }
-    private  List<LatLng> potholeOnRoute = new ArrayList<>();
+    private final List<LatLng> potholeOnRoute = new ArrayList<>();
     private int countPotholesOnRoute(List<LatLng> latlonglist, List<LatLng> potholelist) {
         int count = 0;
         double threshold = 5.0;
@@ -777,7 +778,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
 
         return count;
     }
-    private Set<LatLng> warnedPotholes = new HashSet<>();
+    private final Set<LatLng> warnedPotholes = new HashSet<>();
 
     private void checkProximityToPothole(LatLng currentLocation, List<LatLng> potholeOnRoute) {
         try {
@@ -786,7 +787,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
                 for (LatLng pothole : potholeOnRoute) {
                     double distance = calculateDistanceBetweenPoints(currentLocation, pothole);
                     if (distance <= proximityThreshold && !warnedPotholes.contains(pothole)) {
-                        Log.e("Map Fragment", "Warning: Approaching pothole: " + pothole.toString());
+                        Log.e("Map Fragment", "Warning: Approaching pothole: " + pothole);
                         warnedPotholes.add(pothole); // Đánh dấu ổ gà đã được cảnh báo
                         showWarningDialog(pothole);
                         break;

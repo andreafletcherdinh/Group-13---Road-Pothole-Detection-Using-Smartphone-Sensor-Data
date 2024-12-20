@@ -1,4 +1,4 @@
-package com.example.road_pothole_detection_13.ui.map;
+package com.example.road_pothole_detection_13.app_ui.map;
 
 import android.content.Intent;
 import android.os.Bundle;

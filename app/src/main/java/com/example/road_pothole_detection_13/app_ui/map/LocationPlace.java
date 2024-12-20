@@ -1,10 +1,10 @@
-package com.example.road_pothole_detection_13.ui.map;
+package com.example.road_pothole_detection_13.app_ui.map;
 
 public class LocationPlace {
-    private String name;
-    private String address;
-    private double latitude;
-    private double longitude;
+    private final String name;
+    private final String address;
+    private final double latitude;
+    private final double longitude;
 
     public LocationPlace(String name, String address, double latitude, double longitude) {
         this.name = name;

@@ -32,7 +32,7 @@ public class PotholeDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pothole_detail);
 
         // Thêm RadioGroup
-        RadioGroup radioGroup = findViewById(R.id.radio_group_pothole);
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
         Button btnSubmit = findViewById(R.id.btn_submit);
 
 // Xử lý sự kiện cho nút Submit

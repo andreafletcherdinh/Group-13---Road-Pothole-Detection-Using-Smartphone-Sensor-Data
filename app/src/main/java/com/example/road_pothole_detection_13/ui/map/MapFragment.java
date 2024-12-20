@@ -281,7 +281,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
         });
         searchView.setOnSearchClickListener(v -> {
             searchView.requestFocus();
-            InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(INPUT_METHOD_SERVICE);
             if (imm != null) {
                 imm.showSoftInput(rootView, InputMethodManager.SHOW_IMPLICIT);
             }

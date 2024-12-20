@@ -7,8 +7,8 @@
 
             <!-- Viền của Button -->
             <stroke
-                android:width="4dp"
-                android:color="#4d55fa" /> <!-- Màu viền đỏ -->
+                android:width="2dp"
+                android:color="#4d55fa" />
             <!-- Bo tròn các góc (nếu cần) -->
             <corners android:radius="12dp" />
         </shape>

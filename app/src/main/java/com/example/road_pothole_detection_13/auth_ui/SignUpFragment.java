@@ -359,7 +359,7 @@ public class SignUpFragment extends Fragment {
             dismissLoadingDialog();
 
             // Hiển thị dialog kết quả
-            if (result.first == 201) {
+            if (result.first == 200) {
                 showDialog("Success", "Sign up successfully. Please login");
 
                 // Xoá back stack

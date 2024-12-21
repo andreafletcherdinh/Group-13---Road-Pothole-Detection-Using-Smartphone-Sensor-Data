@@ -1,7 +1,9 @@
 package com.example.road_pothole_detection_13.app_ui.settings;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -273,6 +275,13 @@ public class PasswordSettingFragment extends Fragment {
                 .setPositiveButton("OK", (dialog, which) -> {
                     dialog.dismiss();
 
+                    // Delete token in cache
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove("accessToken");
+                    editor.apply();
+
+                    // Back to login screen
                     Intent intent = new Intent(requireContext(), AuthActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

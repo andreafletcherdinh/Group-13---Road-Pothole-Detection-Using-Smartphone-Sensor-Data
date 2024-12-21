@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -86,12 +88,23 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false);
-
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Check if there is accessToken in cache
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        // Get token from cache
+        String accessToken = sharedPreferences.getString("accessToken", null);
+        if (accessToken != null) {
+            // Chuyển sang MainActivity
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra("accessToken", accessToken);
+            startActivity(intent);
+            getActivity().finish();
+        }
 
         // Forgot password fragment
         TextView forgotPasswordText = view.findViewById(R.id.forgotPasswordText);
@@ -309,6 +322,15 @@ public class LoginFragment extends Fragment {
                     accessToken = dataObject.getString("accessToken");
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
+                }
+
+                // Lưu dữ liệu vào bộ nhớ cache nếu cần tự động đăng nhập
+                CheckBox rememberMeCheckBox = getView().findViewById(R.id.chkBoxRememberMe);
+                if (rememberMeCheckBox.isChecked()) {
+                    SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString("accessToken", accessToken);
+                    editor.commit();
                 }
 
                 // Chuyển sang MainActivity

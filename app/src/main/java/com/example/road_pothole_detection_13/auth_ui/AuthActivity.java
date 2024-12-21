@@ -1,5 +1,7 @@
 package com.example.road_pothole_detection_13.auth_ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;

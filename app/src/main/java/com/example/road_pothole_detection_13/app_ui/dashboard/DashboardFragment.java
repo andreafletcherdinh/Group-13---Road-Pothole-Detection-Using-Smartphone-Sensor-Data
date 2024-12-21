@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -34,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.*;
 /*Retrofit là một HTTP client type-safe cho Android, Java và kotlin được phát triển bởi Square. Retrofit giúp dễ dàng kết nối đến một dịch vụ REST trên web bằng cách chyển đổi API thành Java Interface.*/
 import retrofit2.Call;
@@ -43,6 +46,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DashboardFragment extends Fragment {
+    private TextView dateTextView;
     private BarChart barChart;
     private PieChart pieChart;
     private ApiService apiService; // Khởi tạo API service
@@ -66,19 +70,18 @@ public class DashboardFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        /*// Initialize BarChart
-        barChart = rootView.findViewById(R.id.barChartWithData);
-        configureBarChart(); // Set up BarChart properties
-
-        // Initialize PieChart
-        pieChart = rootView.findViewById(R.id.pieChartWithData);
-        configurePieChart(); // Set up PieChart properties
-        setPieChartData();   // Add data to PieChart
-
-        // Load data
-        loadPotholeData();*/
-
+        // Thêm khởi tạo và set ngày cho TextView
+        dateTextView = rootView.findViewById(R.id.dateTextView);
+        setCurrentDate();
         return rootView;
+    }
+
+    private void setCurrentDate() {
+        if (dateTextView != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.US);
+            String currentDate = dateFormat.format(new Date());
+            dateTextView.setText(currentDate);
+        }
     }
 
     @Override
@@ -223,20 +226,13 @@ public class DashboardFragment extends Fragment {
         pieChart.setCenterText("Mức độ hư hại");
         pieChart.setCenterTextSize(16f);
 
-        // Legend
+        // Legend (ẩn đi)
         Legend legend = pieChart.getLegend();
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        legend.setDrawInside(false);
-        legend.setXEntrySpace(7f);
-        legend.setYEntrySpace(0f);
-        legend.setYOffset(10f);
-        legend.setTextSize(12f);
+        legend.setEnabled(false); // Tắt Legend
 
         // Rotation
         pieChart.setRotationAngle(0);
-        pieChart.setRotationEnabled(true);
+        pieChart.setRotationEnabled(false);
         pieChart.setHighlightPerTapEnabled(true);
     }
 

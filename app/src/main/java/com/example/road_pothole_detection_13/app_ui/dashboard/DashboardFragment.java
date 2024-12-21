@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
@@ -87,11 +88,6 @@ public class DashboardFragment extends Fragment {
         // Initialize charts sau khi view đã được tạo
         initializeCharts();
 
-        // Add data to PieChart
-        if (pieChart != null) {
-            setPieChartData();
-        }
-
         // Load data
         loadPotholeData();
     }
@@ -132,6 +128,7 @@ public class DashboardFragment extends Fragment {
                     List<Pothole> potholes = response.body().getData();
                     if (potholes != null) {
                         updateBarChartWithData(potholes);
+                        setPieChartData(potholes);
                     }
                 } else {
                     Toast.makeText(getContext(), "Error loading data", Toast.LENGTH_SHORT).show();
@@ -244,24 +241,71 @@ public class DashboardFragment extends Fragment {
     }
 
     // Method to set PieChart data
-    private void setPieChartData() {
-        ArrayList<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(40f, "Light"));
-        entries.add(new PieEntry(35f, "Moderate"));
-        entries.add(new PieEntry(25f, "Heavy"));
+    private void setPieChartData(List<Pothole> potholes) {
+        if (pieChart == null || !isAdded()) return;
 
-        PieDataSet dataSet = new PieDataSet(entries, "Pothole Severity");
-        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(5f);
+        try {
+            // Tạo map để đếm số lượng theo severity
+            Map<String, Integer> severityCounts = new HashMap<>();
+            severityCounts.put("Light", 0);
+            severityCounts.put("Moderate", 0);
+            severityCounts.put("Heavy", 0);
 
-        PieData data = new PieData(dataSet);
-        data.setValueTextSize(10f);
-        data.setValueTextColor(Color.BLACK);
-        pieChart.setData(data);
-        pieChart.invalidate();
+            // Đếm số lượng cho mỗi loại severity
+            for (Pothole pothole : potholes) {
+                String severity = pothole.getSeverity();
+                if (severity != null) {
+                    // Chuẩn hóa severity string
+                    severity = severity.trim().toLowerCase();
+                    if (severity.equals("light") || severity.equals("1")) {
+                        severityCounts.put("Light", severityCounts.get("Light") + 1);
+                    } else if (severity.equals("moderate") || severity.equals("2")) {
+                        severityCounts.put("Moderate", severityCounts.get("Moderate") + 1);
+                    } else if (severity.equals("severe") || severity.equals("heavy") || severity.equals("3")) {
+                        severityCounts.put("Heavy", severityCounts.get("Heavy") + 1);
+                    }
+                }
+            }
+
+            // Tạo entries cho PieChart
+            ArrayList<PieEntry> entries = new ArrayList<>();
+            for (Map.Entry<String, Integer> entry : severityCounts.entrySet()) {
+                if (entry.getValue() > 0) { // Chỉ thêm các mục có giá trị > 0
+                    entries.add(new PieEntry(entry.getValue(), entry.getKey()));
+                }
+            }
+
+            // Tạo dataset
+            PieDataSet dataSet = new PieDataSet(entries, "Mức độ hư hại");
+
+            // Set màu cho từng loại
+            ArrayList<Integer> colors = new ArrayList<>();
+            colors.add(Color.rgb(76, 175, 80));  // Light - Màu xanh lá
+            colors.add(Color.rgb(255, 152, 0));  // Moderate - Màu cam
+            colors.add(Color.rgb(244, 67, 54));  // Heavy - Màu đỏ
+            dataSet.setColors(colors);
+
+            // Định dạng
+            dataSet.setSliceSpace(3f);
+            dataSet.setSelectionShift(5f);
+
+            // Tạo PieData
+            PieData data = new PieData(dataSet);
+            data.setValueFormatter(new PercentFormatter(pieChart));
+            data.setValueTextSize(11f);
+            data.setValueTextColor(Color.WHITE);
+
+            // Cập nhật chart
+            pieChart.setData(data);
+            pieChart.invalidate();
+
+        } catch (Exception e) {
+            if (getContext() != null) {
+                Toast.makeText(getContext(), "Error updating pie chart: " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
     }
-
     // Xử lý dữ liệu và cập nhật biểu đồ
     private void updateBarChartWithData(List<Pothole> potholes) {
         if (barChart == null || !isAdded()) return;

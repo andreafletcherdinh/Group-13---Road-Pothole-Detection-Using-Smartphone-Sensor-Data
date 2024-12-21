@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -181,6 +182,16 @@ public class DashboardFragment extends Fragment {
         leftAxis.setAxisMinimum(0f);
         leftAxis.setTextSize(12f);
         leftAxis.setDrawZeroLine(true);
+
+        // Ensure Y-axis shows integer values only
+        leftAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.valueOf((int) value); // Convert float to integer
+            }
+        });
+        leftAxis.setGranularity(1f); // Ensure step size of 1
+        leftAxis.setGranularityEnabled(true);
 
         YAxis rightAxis = barChart.getAxisRight();
         rightAxis.setEnabled(false);

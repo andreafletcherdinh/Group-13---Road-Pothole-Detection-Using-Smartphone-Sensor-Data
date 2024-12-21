@@ -4,6 +4,6 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface ApiService {
-    @GET("map/potholes")
+    @GET("http://diddysfreakoffparty.online:3000/api/map/potholes")
     Call<PotholeResponse> getPotholes();
 }

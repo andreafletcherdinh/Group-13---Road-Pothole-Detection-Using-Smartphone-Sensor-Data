@@ -224,7 +224,7 @@ public class DashboardFragment extends Fragment {
         // Center text
         pieChart.setDrawCenterText(true);
         pieChart.setCenterText("Mức độ hư hại");
-        pieChart.setCenterTextSize(16f);
+        pieChart.setCenterTextSize(12f);
 
         // Legend (ẩn đi)
         Legend legend = pieChart.getLegend();

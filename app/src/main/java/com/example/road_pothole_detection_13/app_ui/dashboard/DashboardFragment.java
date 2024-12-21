@@ -209,21 +209,38 @@ public class DashboardFragment extends Fragment {
 
     // Method to configure PieChart
     private void configurePieChart() {
+        if (pieChart == null) return;
+
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
-        pieChart.setDrawHoleEnabled(true);
-        pieChart.setHoleRadius(40f);
-        pieChart.setTransparentCircleRadius(45f);
         pieChart.setBackgroundColor(Color.WHITE);
 
+        // Hole trong giữa pie chart
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.WHITE);
+        pieChart.setHoleRadius(58f);
+        pieChart.setTransparentCircleRadius(61f);
 
-        // Configure legend
+        // Center text
+        pieChart.setDrawCenterText(true);
+        pieChart.setCenterText("Mức độ hư hại");
+        pieChart.setCenterTextSize(16f);
+
+        // Legend
         Legend legend = pieChart.getLegend();
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         legend.setDrawInside(false);
+        legend.setXEntrySpace(7f);
+        legend.setYEntrySpace(0f);
+        legend.setYOffset(10f);
         legend.setTextSize(12f);
+
+        // Rotation
+        pieChart.setRotationAngle(0);
+        pieChart.setRotationEnabled(true);
+        pieChart.setHighlightPerTapEnabled(true);
     }
 
     // Method to set PieChart data

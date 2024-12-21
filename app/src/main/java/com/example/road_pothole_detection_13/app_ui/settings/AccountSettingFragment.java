@@ -1,12 +1,21 @@
 package com.example.road_pothole_detection_13.app_ui.settings;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +25,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.road_pothole_detection_13.NetworkUtils;
 import com.example.road_pothole_detection_13.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -82,12 +96,32 @@ public class AccountSettingFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_account_setting, container, false);
     }
 
+    private static final int PERMISSION_REQUEST_CODE = 100;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+    private Uri selectedImageUri;
+    private ImageView previewImageView;
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         // Update data
         updateData();
+
+        // Change avatar
+        previewImageView = view.findViewById(R.id.accountSetting_changeAvatarImageView);
+        // Khởi tạo ActivityResultLauncher
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        selectedImageUri = result.getData().getData();
+                        previewImageView.setImageURI(selectedImageUri);
+                        uploadImage();
+                    }
+                }
+        );
+        previewImageView.setOnClickListener(v -> checkPermissionAndPickImage());
 
         // Back
         ImageView backBtn = view.findViewById(R.id.accoutSetting_backView);
@@ -124,6 +158,14 @@ public class AccountSettingFragment extends Fragment {
         getUserData();
 
         Intent intent = getActivity().getIntent();
+
+        // Avatar
+        String photo = intent.getStringExtra("photo");
+        String photoUrl = "http://diddysfreakoffparty.online:3000" + photo;
+        ImageView avatarImageView = getView().findViewById(R.id.accountSetting_avatarImageView);
+        Picasso.get()
+                .load(photoUrl)
+                .into(avatarImageView);
 
         // Full name
         String fullName = intent.getStringExtra("fullName");
@@ -229,7 +271,7 @@ public class AccountSettingFragment extends Fragment {
             @Override
             public void onFailure(String errorMessage) {
                 // Handle failure
-                showErrorDialog("Connection error", "Error message: " + errorMessage);
+                showErrorDialog("Error", "Error message: " + errorMessage);
             }
         });
     }
@@ -291,6 +333,110 @@ public class AccountSettingFragment extends Fragment {
                 showErrorDialog("Connection error", "Error message: " + errorMessage);
             }
         });
+    }
+
+    private void checkPermissionAndPickImage() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSION_REQUEST_CODE);
+        } else {
+            openImagePicker();
+        }
+    }
+
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        imagePickerLauncher.launch(intent);
+    }
+
+    private void uploadImage() {
+        if (selectedImageUri == null) return;
+
+        try {
+            // Chuyển đổi Uri thành File
+            File imageFile = createFileFromUri(selectedImageUri);
+
+            // Thực hiện upload
+            String token = getActivity().getIntent().getStringExtra("accessToken");
+            NetworkUtils.sendPatchRequestWithFile(
+                    getContext(),
+                    "http://diddysfreakoffparty.online:3000/api/user/update-photo", // Thay thế bằng API endpoint thực
+                    token,
+                    imageFile,
+                    new NetworkUtils.ResponseCallback() {
+                        @Override
+                        public void onSuccess(String response) {
+                            showRequestSuccessDialog("Success", "Update avatar successfully");
+                            Picasso.get()
+                                    .load(selectedImageUri)
+                                    .into(previewImageView);
+                        }
+
+                        @Override
+                        public void onFailure(String errorMessage) {
+                            showRequestErrorDialog("Error", "Error message: " + errorMessage);
+                            updateData();
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            showErrorDialog("Error", "Error while processing file: " + e.getMessage());
+        }
+    }
+
+    private File createFileFromUri(Uri uri) throws Exception {
+        InputStream inputStream = getContext().getContentResolver().openInputStream(uri);
+        File tempFile = File.createTempFile("upload", ".jpg", getContext().getCacheDir());
+
+        FileOutputStream outputStream = new FileOutputStream(tempFile);
+        byte[] buffer = new byte[4096];
+        int bytesRead;
+
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+
+        outputStream.close();
+        inputStream.close();
+
+        return tempFile;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openImagePicker();
+            } else {
+                Toast.makeText(getContext(), "Selecting images needs storage access permission",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showRequestSuccessDialog(String title, String message) {
+        new AlertDialog.Builder(getContext())
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
+    private void showRequestErrorDialog(String title, String message) {
+        new AlertDialog.Builder(getContext())
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Close", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
 }

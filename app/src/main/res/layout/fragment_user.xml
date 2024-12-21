@@ -202,11 +202,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/userAvatar_ImageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/user_avatar"
             tools:srcCompat="@drawable/user_avatar" />
     </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/user_changeAvatarImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="-10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView2"
+        app:layout_constraintStart_toEndOf="@+id/cardView2"
+        app:srcCompat="@drawable/edit_photo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

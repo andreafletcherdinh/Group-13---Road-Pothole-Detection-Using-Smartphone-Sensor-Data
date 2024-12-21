@@ -188,12 +188,22 @@
         app:layout_constraintTop_toBottomOf="@+id/textView33">
 
         <ImageView
-            android:id="@+id/imageView13"
+            android:id="@+id/accountSetting_avatarImageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/user_avatar"
             tools:src="@tools:sample/avatars"
             tools:srcCompat="@drawable/user_avatar" />
     </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/accountSetting_changeAvatarImageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="-10dp"
+        android:src="@drawable/edit_photo"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+        app:layout_constraintStart_toEndOf="@+id/cardView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

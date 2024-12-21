@@ -276,7 +276,7 @@ public class PasswordSettingFragment extends Fragment {
                     dialog.dismiss();
 
                     // Delete token in cache
-                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Activity.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyAppPrefs", Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.remove("accessToken");
                     editor.commit();

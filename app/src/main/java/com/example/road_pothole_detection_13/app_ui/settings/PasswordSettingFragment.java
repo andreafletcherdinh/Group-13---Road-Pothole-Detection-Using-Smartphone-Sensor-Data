@@ -279,7 +279,11 @@ public class PasswordSettingFragment extends Fragment {
                     SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Activity.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.remove("accessToken");
-                    editor.apply();
+                    editor.commit();
+
+                    // Turn off auto login
+                    editor.remove("rememberMe");
+                    editor.commit();
 
                     // Back to login screen
                     Intent intent = new Intent(requireContext(), AuthActivity.class);

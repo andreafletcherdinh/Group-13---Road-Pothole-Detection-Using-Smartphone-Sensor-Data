@@ -120,8 +120,8 @@ public class UserFragment extends Fragment {
                         // Delete token in cache
                         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Activity.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.remove("accessToken");
-                        editor.apply();
+                        editor.remove("accessToken").commit();
+                        editor.remove("rememberMe").commit();
 
                         // Back to login screen
                         Intent intent = new Intent(getActivity(), AuthActivity.class);

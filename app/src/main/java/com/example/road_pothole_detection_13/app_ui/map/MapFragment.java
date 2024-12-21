@@ -11,11 +11,13 @@ import static com.mapbox.mapboxsdk.style.layers.Property.VISIBLE;
 
 import android.Manifest;
 import android.adservices.adselection.AdSelectionOutcome;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent
 ;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,6 +30,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Vibrator;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -500,6 +503,18 @@ public class MapFragment extends Fragment implements SensorEventListener {
         }
     }
     private void handleShakeEvent(String severity) {
+        // Rung thiết bị nếu được thiết lập
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", Activity.MODE_PRIVATE);
+        Boolean isVibrationAllowed = sharedPreferences.getBoolean("isVibrationAllowed", true);
+        if (isVibrationAllowed) {
+            // Lấy Vibrator từ hệ thống
+            Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+
+            // Kiểm tra nếu thiết bị hỗ trợ rung
+            if (vibrator != null) {
+                vibrator.vibrate(500); // Rung trong 500ms (0.5 giây)
+            }
+        }
 
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastShakeTime > SHAKE_COOLDOWN_MS) {

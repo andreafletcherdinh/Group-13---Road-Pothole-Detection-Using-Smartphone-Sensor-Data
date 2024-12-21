@@ -94,11 +94,11 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Check if there is accessToken in cache
+        // Check if automatic login is enabled
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
-        // Get token from cache
-        String accessToken = sharedPreferences.getString("accessToken", null);
-        if (accessToken != null) {
+        Boolean isRememberMeAllowed = sharedPreferences.getBoolean("rememberMe", false);
+        if (isRememberMeAllowed) {
+            String accessToken = sharedPreferences.getString("accessToken", null);
             // Chuyển sang MainActivity
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra("accessToken", accessToken);
@@ -329,6 +329,7 @@ public class LoginFragment extends Fragment {
                 if (rememberMeCheckBox.isChecked()) {
                     SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("rememberMe", true);
                     editor.putString("accessToken", accessToken);
                     editor.commit();
                 }

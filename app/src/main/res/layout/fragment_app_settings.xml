@@ -33,8 +33,9 @@
         android:id="@+id/textView53"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Notify real-time alerts"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="Vibrate when detected a pothole"
         android:textColor="#000000"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -42,60 +43,15 @@
         app:layout_constraintTop_toBottomOf="@+id/appSettings_backBtn" />
 
     <Switch
-        android:id="@+id/switch3"
+        android:id="@+id/vibrate_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="20dp"
+        android:textColorLink="#4d55fa"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView53"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView53" />
-
-    <TextView
-        android:id="@+id/textView55"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Send weekly road quality reports"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView53" />
-
-    <Switch
-        android:id="@+id/switch4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView55"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView55" />
-
-    <TextView
-        android:id="@+id/textView56"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Detection sensitivity"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView55" />
-
-    <SeekBar
-        android:id="@+id/seekBar2"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
-        android:max="10"
-        android:progress="5"
-        app:layout_constraintBottom_toBottomOf="@+id/textView56"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView56" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/appInfo_layout"
@@ -103,7 +59,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView56">
+        app:layout_constraintTop_toBottomOf="@+id/textView53">
 
         <TextView
             android:id="@+id/textView57"

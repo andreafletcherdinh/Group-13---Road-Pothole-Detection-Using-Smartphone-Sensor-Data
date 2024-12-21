@@ -1,5 +1,7 @@
 package com.example.road_pothole_detection_13.app_ui.settings;
 
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -9,7 +11,9 @@ import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 
 import com.example.road_pothole_detection_13.R;
 
@@ -70,6 +74,26 @@ public class AppSettingsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Vibration setting
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", Activity.MODE_PRIVATE);
+        Boolean isVibrationAllowed = sharedPreferences.getBoolean("isVibrationAllowed", true);
+        Switch vibrationSwitch = view.findViewById(R.id.vibrate_switch);
+        vibrationSwitch.setChecked(isVibrationAllowed);
+
+        vibrationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (isChecked) {
+                    editor.putBoolean("isVibrationAllowed", true);
+                }
+                else {
+                    editor.putBoolean("isVibrationAllowed", false);
+                }
+                editor.commit();
+            }
+        });
 
         // Back
         ImageView backBtn = view.findViewById(R.id.appSettings_backBtn);

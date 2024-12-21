@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +27,7 @@
             android:name=".app_ui.settings.SettingsHostActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.map.PotholeDetailActivity"
+            android:name=".app_ui.map.PotholeDetailActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

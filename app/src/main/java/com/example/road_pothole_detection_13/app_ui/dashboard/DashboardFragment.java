@@ -85,6 +85,12 @@ public class DashboardFragment extends Fragment {
 
         // Initialize charts sau khi view đã được tạo
         initializeCharts();
+
+        // Add data to PieChart
+        if (pieChart != null) {
+            setPieChartData();
+        }
+
         // Load data
         loadPotholeData();
     }
@@ -101,7 +107,7 @@ public class DashboardFragment extends Fragment {
         }
 
         if (pieChart != null) {
-            // configurePieChart();
+            configurePieChart();
         }
     }
 
@@ -178,35 +184,19 @@ public class DashboardFragment extends Fragment {
 
         YAxis rightAxis = barChart.getAxisRight();
         rightAxis.setEnabled(false);
+
+        Legend legend = barChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setDrawInside(false);
+        legend.setForm(Legend.LegendForm.SQUARE);
+        legend.setFormSize(9f);
+        legend.setTextSize(11f);
+        legend.setXEntrySpace(4f);
     }
 
-    // Method to set BarChart data
-    /*private void setBarChartData() {
-        ArrayList<BarEntry> values = new ArrayList<>();
-        values.add(new BarEntry(0, 25f));
-        values.add(new BarEntry(1, 30f));
-        values.add(new BarEntry(2, 35f));
-        values.add(new BarEntry(3, 40f));
-        values.add(new BarEntry(4, 45f));
-        values.add(new BarEntry(5, 20f));
-        values.add(new BarEntry(6, 15f));
-
-        BarDataSet set1 = new BarDataSet(values, "Last 7 days detected potholes");
-        List<Integer> colors = new ArrayList<>();
-        for (int color : ColorTemplate.MATERIAL_COLORS) {
-            colors.add(color);
-        }
-        set1.setColors(colors);
-
-        BarData data = new BarData(set1);
-        data.setValueTextSize(10f);
-        data.setValueTextColor(Color.BLACK);
-        data.setBarWidth(0.9f);
-        barChart.setData(data);
-        barChart.invalidate();
-    }*/
-
-    /*// Method to configure PieChart
+    // Method to configure PieChart
     private void configurePieChart() {
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
@@ -242,7 +232,7 @@ public class DashboardFragment extends Fragment {
         data.setValueTextColor(Color.BLACK);
         pieChart.setData(data);
         pieChart.invalidate();
-    }*/
+    }
 
     // Xử lý dữ liệu và cập nhật biểu đồ
     private void updateBarChartWithData(List<Pothole> potholes) {

@@ -72,37 +72,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#4d55fa"
+                app:cardBackgroundColor="#FFFFFF"
                 app:cardUseCompatPadding="true">
 
-                <com.github.mikephil.charting.charts.BarChart
-                    android:id="@+id/barChartWithData"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_margin="2dp"
-                    android:background="#FFFFFF"
-                    android:padding="8dp" />
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChartWithData"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:background="#FFFFFF"
+                        android:padding="8dp" />
+
 
             </androidx.cardview.widget.CardView>
 
+            <!-- Sửa lại CardView cho PieChart -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:cardBackgroundColor="#4d55fa"
-                app:cardCornerRadius="8dp"
+                app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
+                app:cardBackgroundColor="#FFFFFF"
                 app:cardUseCompatPadding="true">
 
-                <com.github.mikephil.charting.charts.PieChart
-                    android:id="@+id/pieChartWithData"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_margin="2dp"
-                    android:background="#FFFFFF"
-                    android:padding="8dp" />
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChartWithData"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:background="#FFFFFF"
+                        android:padding="8dp" />
 
             </androidx.cardview.widget.CardView>
 

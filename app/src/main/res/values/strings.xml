@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Road_Pothole_Detection_13</string>
+    <string name="app_name">Pothole Detector</string>
     <string name="title_map">Map</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_settings">Settings</string>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,10 +94,11 @@ public class ApplicationInformationFragment extends Fragment {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));
 
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
+                if (Patterns.WEB_URL.matcher(url).matches()) {
+                    Intent intent1 = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent1);
                 } else {
-                    Toast.makeText(getActivity(), "There are no browser supporting opening this link!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Can not open URL", Toast.LENGTH_SHORT).show();
                 }
             }
         });

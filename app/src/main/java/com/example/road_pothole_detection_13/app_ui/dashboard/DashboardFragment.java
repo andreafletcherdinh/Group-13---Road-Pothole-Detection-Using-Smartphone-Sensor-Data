@@ -272,7 +272,7 @@ public class DashboardFragment extends Fragment {
             }
 
             // Tạo dataset
-            PieDataSet dataSet = new PieDataSet(entries, "Mức độ hư hại");
+            PieDataSet dataSet = new PieDataSet(entries, "Severity level");
 
             // Set màu cho từng loại
             ArrayList<Integer> colors = new ArrayList<>();
@@ -354,7 +354,7 @@ public class DashboardFragment extends Fragment {
             }
 
             // Cập nhật BarChart
-            BarDataSet dataSet = new BarDataSet(entries, "Số lượng ổ gà mỗi ngày");
+            BarDataSet dataSet = new BarDataSet(entries, "Detected potholes in last 7 days");
             dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
 
             BarData barData = new BarData(dataSet);

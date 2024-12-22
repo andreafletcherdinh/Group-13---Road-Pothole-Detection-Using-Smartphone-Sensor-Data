@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -37,9 +38,11 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -121,7 +124,8 @@ public class AccountSettingFragment extends Fragment {
                     }
                 }
         );
-        previewImageView.setOnClickListener(v -> checkPermissionAndPickImage());
+        ImageView changeAvatarImageView = view.findViewById(R.id.accountSetting_changeAvatarImageView);
+        changeAvatarImageView.setOnClickListener(v -> checkPermissionAndPickImage());
 
         // Back
         ImageView backBtn = view.findViewById(R.id.accoutSetting_backView);
@@ -181,7 +185,22 @@ public class AccountSettingFragment extends Fragment {
         genderList.add("female");
         genderList.add("other");
         // Create adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, genderList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, genderList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                textView.setTextColor(Color.BLACK); // Đặt màu chữ cho item đang hiển thị
+                return textView;
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                TextView textView = (TextView) super.getDropDownView(position, convertView, parent);
+                textView.setBackgroundColor(Color.parseColor("#D9D9D9"));
+                textView.setTextColor(Color.BLACK); // Đặt màu chữ cho danh sách drop-down
+                return textView;
+            }
+        };
         genderSpinner.setAdapter(adapter);
         int position = adapter.getPosition(gender[0]);
         genderSpinner.setSelection(position);
@@ -200,8 +219,9 @@ public class AccountSettingFragment extends Fragment {
 
         // Day of birth
         String dayOfBirth = intent.getStringExtra("birthDay");
+        dayOfBirth = formatDate(dayOfBirth);
         TextView dayOfBirth_textView = getView().findViewById(R.id.accountSetting_dayOfBirthTextDate);
-        if (dayOfBirth == null) dayOfBirth_textView.setText(dayOfBirth);
+        if (!dayOfBirth.isEmpty()) dayOfBirth_textView.setText(dayOfBirth);
 
         Calendar calendar = Calendar.getInstance();
 
@@ -231,6 +251,26 @@ public class AccountSettingFragment extends Fragment {
         String address = intent.getStringExtra("address");
         TextView address_textView = getView().findViewById(R.id.accountSetting_addressEditText);
         address_textView.setText(address);
+    }
+
+    public String formatDate(String isoDateString) {
+        // Định dạng ISO ban đầu của chuỗi thời gian
+        SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+        // Định dạng kết quả
+        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+        String formattedDate = "";
+        try {
+            // Phân tích chuỗi thành đối tượng Date
+            Date date = isoFormat.parse(isoDateString);
+            // Định dạng lại đối tượng Date thành chuỗi theo định dạng mong muốn
+            formattedDate = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        finally {
+            return formattedDate;
+        }
     }
 
     void updateUserProfile() {

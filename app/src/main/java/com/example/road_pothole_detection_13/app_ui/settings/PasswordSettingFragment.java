@@ -263,7 +263,11 @@ public class PasswordSettingFragment extends Fragment {
             @Override
             public void onFailure(String errorMessage) {
                 // Handle failure
-                showErrorDialog("Failed to change password", "Error message: " + errorMessage);
+                if (errorMessage.equals("Request failed with code: 403")) {
+                    showErrorDialog("Failed to change password", "Current password is incorrect");
+                } else {
+                    showErrorDialog("Failed to change password", "Error message: " + errorMessage);
+                }
             }
         });
     }
@@ -290,6 +294,7 @@ public class PasswordSettingFragment extends Fragment {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 })
+                .setCancelable(false)
                 .show();
     }
 

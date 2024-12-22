@@ -115,7 +115,8 @@ public class UserFragment extends Fragment {
         );
 
         // Change image
-        previewImageView.setOnClickListener(v -> checkPermissionAndPickImage());
+        ImageView changeAvatarImageView = view.findViewById(R.id.user_changeAvatarImageView);
+        changeAvatarImageView.setOnClickListener(v -> checkPermissionAndPickImage());
 
         // Account setting
         View account_layout = view.findViewById(R.id.account_layout);
@@ -151,7 +152,7 @@ public class UserFragment extends Fragment {
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Notice");
-                builder.setMessage("Are you want to logout?");
+                builder.setMessage("Do you want to logout?");
 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override

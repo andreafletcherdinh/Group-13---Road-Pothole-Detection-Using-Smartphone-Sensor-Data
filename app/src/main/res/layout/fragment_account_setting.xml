@@ -12,7 +12,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="20dp"
-        android:src="@drawable/purple_arrow"
+        android:src="@drawable/turn_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,7 +20,7 @@
         android:id="@+id/textView33"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="25dp"
         android:text="Account setting"
         android:textColor="#4d55fa"
         android:textSize="20sp"
@@ -99,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:background="@drawable/rounded_border"
+                android:padding="5dp"
                 android:textColor="#000000"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -201,8 +202,8 @@
         android:id="@+id/accountSetting_changeAvatarImageView"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="-10dp"
-        android:src="@drawable/edit_photo"
+        android:layout_marginStart="-5dp"
+        android:src="@drawable/edit_image"
         app:layout_constraintBottom_toTopOf="@+id/scrollView3"
         app:layout_constraintStart_toEndOf="@+id/cardView" />
 

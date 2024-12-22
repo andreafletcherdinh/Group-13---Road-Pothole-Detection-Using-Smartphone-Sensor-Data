@@ -1,12 +1,15 @@
 package com.example.road_pothole_detection_13;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.view.WindowManager;
 
+import com.example.road_pothole_detection_13.auth_ui.AuthActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -82,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String errorMessage) {
-                showErrorDialog("Connection error", "Error message: " + errorMessage);
+                showErrorDialog("Error", "Connection error. Please login again");
             }
         });
     }
@@ -91,15 +94,20 @@ public class MainActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("Try again", (dialog, which) -> {
-                    // Có thể gọi lại API ở đây nếu cần
+                .setPositiveButton("OK", (dialog, which) -> {
                     dialog.dismiss();
+
+                    // Delete token in cache
+                    SharedPreferences sharedPreferences = getSharedPreferences("MyAppPrefs", Activity.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove("accessToken").commit();
+                    editor.remove("rememberMe").commit();
+
+                    // Back to login screen
+                    Intent intent = new Intent(MainActivity.this ,AuthActivity.class);
+                    startActivity(intent);
+                    finish();
                 })
-                .setNegativeButton("Close", (dialog, which) -> {
-                    dialog.dismiss();
-                    finishAffinity();
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
                 .setCancelable(false)
                 .show();
     }

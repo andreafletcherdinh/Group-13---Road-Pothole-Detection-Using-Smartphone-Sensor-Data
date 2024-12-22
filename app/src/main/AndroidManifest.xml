@@ -37,6 +37,9 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
+            android:name=".intro_ui.FirstTime"
+            android:exported="false" />
+        <activity
             android:name=".intro_ui.IntroActivity"
             android:exported="true"
             android:label="@string/app_name">
@@ -46,6 +49,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <meta-data
             android:name="osmdroid.basePath"

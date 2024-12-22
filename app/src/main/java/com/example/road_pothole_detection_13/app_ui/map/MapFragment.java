@@ -26,6 +26,7 @@ import android.graphics.Bitmap;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -38,11 +39,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -165,7 +169,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
     private RecyclerView recyclerView;
     private SearchAdapter adapter;
     private static final int REQUEST_CODE = 1;
-    private RelativeLayout layoutButtonGroup;
+    private ConstraintLayout layoutButtonGroup;
     private boolean isLayoutVisible = true;
     private final List<com.example.road_pothole_detection_13.app_ui.map.LocationPlace> suggestions = new ArrayList<>();
     private  Button directionButton;
@@ -258,6 +262,17 @@ public class MapFragment extends Fragment implements SensorEventListener {
         });
         recyclerView.setAdapter(adapter);
 
+        // Set searchView text color
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        searchEditText.setTextColor(getResources().getColor(R.color.black));
+
+        // Set searchView icon color
+        ImageView searchIcon = searchView.findViewById(androidx.appcompat.R.id.search_button);
+        searchIcon.setColorFilter(getResources().getColor(R.color.black));
+
+        // Set searchView "X" icon color
+        ImageView closeIcon = searchView.findViewById(androidx.appcompat.R.id.search_close_btn);
+        closeIcon.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_IN);
 
         mapView.getMapAsync(mapboxMap -> {
             map = mapboxMap;
@@ -296,7 +311,7 @@ public class MapFragment extends Fragment implements SensorEventListener {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchplace(query);
-                return true;
+                return false;
             }
 
             @Override
@@ -307,7 +322,22 @@ public class MapFragment extends Fragment implements SensorEventListener {
                 } else {
                     recyclerView.setVisibility(View.GONE);
                 }
-                return true;
+                return false;
+            }
+        });
+
+        searchView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                searchView.setIconified(false); // Mở rộng searchView nếu đang thu nhỏ
+            }
+            return false;
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                recyclerView.setVisibility(View.GONE);
+                return false;
             }
         });
 
@@ -1129,6 +1159,8 @@ public class MapFragment extends Fragment implements SensorEventListener {
                         suggestions.addAll(newSuggestions);
                         adapter.notifyDataSetChanged();
                         recyclerView.setVisibility(View.VISIBLE);
+
+                        if (newSuggestions.size() == 0) recyclerView.setVisibility(View.GONE);
                     });
                 }
             } catch (Exception e) {

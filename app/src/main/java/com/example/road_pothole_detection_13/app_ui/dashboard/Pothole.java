@@ -15,4 +15,6 @@ public class Pothole {
     public String getCreatedAt() {
         return createdAt;
     }
+
+    public String getSeverity() {return  severity;}
 }

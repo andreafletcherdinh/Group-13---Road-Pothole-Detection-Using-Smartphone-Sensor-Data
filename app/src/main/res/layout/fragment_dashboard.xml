@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="@drawable/login_bg"
     tools:context=".app_ui.dashboard.DashboardFragment">
 
     <ScrollView
@@ -44,6 +43,7 @@
                     android:layout_margin="20dp"
                     android:textColor="#000000"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:layout_conversion_absoluteHeight="27dp"
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
                     android:text="Dashboard"
-                    android:textColor="#4d55fa"
+                    android:textColor="#000000"
                     android:textSize="34sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -83,9 +83,9 @@
 
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/barChartWithData"
-                    android:layout_width="320dp"
+                    android:layout_width="344dp"
                     android:layout_height="279dp"
-                    android:background="#FFFFFF"
+                    android:background="#fed1ab"
                     android:padding="8dp"
                     tools:layout_conversion_absoluteHeight="300dp"
                     tools:layout_conversion_absoluteWidth="364dp"
@@ -113,9 +113,9 @@
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pieChartWithData"
-                    android:layout_width="322dp"
+                    android:layout_width="342dp"
                     android:layout_height="279dp"
-                    android:background="#FFFFFF"
+                    android:background="#fed1ab"
                     android:padding="8dp"
                     tools:layout_conversion_absoluteHeight="200dp"
                     tools:layout_conversion_absoluteWidth="364dp"

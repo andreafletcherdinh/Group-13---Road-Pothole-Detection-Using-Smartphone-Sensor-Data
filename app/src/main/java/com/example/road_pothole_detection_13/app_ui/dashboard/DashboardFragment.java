@@ -164,7 +164,6 @@ public class DashboardFragment extends Fragment {
         barChart.setMaxVisibleValueCount(60);
         barChart.setPinchZoom(false);
         barChart.setDrawGridBackground(false);
-        barChart.setBackgroundColor(Color.WHITE);
         barChart.setScaleEnabled(false);
 
         // Configure X axis
@@ -213,7 +212,6 @@ public class DashboardFragment extends Fragment {
 
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
-        pieChart.setBackgroundColor(Color.WHITE);
 
         // Hole trong giữa pie chart
         pieChart.setDrawHoleEnabled(true);
@@ -223,7 +221,7 @@ public class DashboardFragment extends Fragment {
 
         // Center text
         pieChart.setDrawCenterText(true);
-        pieChart.setCenterText("Mức độ hư hại");
+        pieChart.setCenterText("Severity level");
         pieChart.setCenterTextSize(12f);
 
         // Legend (ẩn đi)

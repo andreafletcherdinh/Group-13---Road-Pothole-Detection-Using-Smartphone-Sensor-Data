@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.road_pothole_detection_13.ui.dashboard.DashboardFragment"
+        android:name="com.example.road_pothole_detection_13.app_ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.road_pothole_detection_13.ui.map.MapFragment"
+        android:name="com.example.road_pothole_detection_13.app_ui.map.MapFragment"
         android:label="@string/title_map"
         tools:layout="@layout/fragment_map" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.road_pothole_detection_13.ui.settings.SettingsFragment"
+        android:id="@+id/navigation_settings"
+        android:name="com.example.road_pothole_detection_13.app_ui.settings.UserFragment"
         android:label="@string/title_settings"
-        tools:layout="@layout/fragment_settings" />
+        tools:layout="@layout/fragment_user" />
 </navigation>

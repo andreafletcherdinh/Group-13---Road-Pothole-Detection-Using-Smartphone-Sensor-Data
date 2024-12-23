@@ -4,19 +4,127 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.DashboardFragment">
+    android:background="@drawable/login_bg"
+    tools:context=".app_ui.dashboard.DashboardFragment">
 
-    <TextView
-        android:id="@+id/text_dashboard"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Header với hình ảnh và ngày tháng -->
+
+            <!-- Container cho biểu đồ cột -->
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:layout_conversion_absoluteHeight="133dp"
+                tools:layout_conversion_absoluteWidth="379dp">
+
+                <TextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:textColor="#000000"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_conversion_absoluteHeight="27dp"
+                    tools:layout_conversion_absoluteWidth="257dp"
+                    tools:text="Tuesday, December 24, 2024" />
+
+                <TextView
+                    android:id="@+id/dashboardTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="Dashboard"
+                    android:textColor="#000000"
+                    android:textSize="34sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dateTextView"
+                    tools:layout_conversion_absoluteHeight="45dp"
+                    tools:layout_conversion_absoluteWidth="165dp" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView5"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:layout_margin="10dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+                tools:layout_conversion_absoluteHeight="319dp"
+                tools:layout_conversion_absoluteWidth="379dp">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChartWithData"
+                    android:layout_width="344dp"
+                    android:layout_height="279dp"
+                    android:background="#fed1ab"
+                    android:padding="8dp"
+                    tools:layout_conversion_absoluteHeight="300dp"
+                    tools:layout_conversion_absoluteWidth="364dp"
+                    tools:layout_editor_absoluteX="24dp"
+                    tools:layout_editor_absoluteY="174dp" />
+
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Sửa lại CardView cho PieChart -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView6"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:layout_margin="10dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cardView5"
+                tools:layout_conversion_absoluteHeight="219dp"
+                tools:layout_conversion_absoluteWidth="379dp">
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChartWithData"
+                    android:layout_width="342dp"
+                    android:layout_height="279dp"
+                    android:background="#fed1ab"
+                    android:padding="8dp"
+                    tools:layout_conversion_absoluteHeight="200dp"
+                    tools:layout_conversion_absoluteWidth="364dp"
+                    tools:layout_editor_absoluteX="24dp"
+                    tools:layout_editor_absoluteY="514dp" />
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,8 @@
+<!-- rounded_border.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#D9D9D9" /> <!-- Background color -->
+    <stroke
+        android:width="2dp"
+        android:color="@android:color/holo_red_light" />
+    <corners android:radius="20dp" />
+</shape>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Màu nền trong suốt -->
+    <solid android:color="@android:color/transparent" />
+
+    <!-- Viền của icon -->
+    <stroke
+        android:width="2dp"
+        android:color="#bba6f1" /> <!-- Màu đỏ -->
+
+    <!-- Bo tròn góc -->
+    <corners android:radius="4dp" />
+</shape>

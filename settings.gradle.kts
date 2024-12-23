@@ -1,3 +1,6 @@
+fun MavenArtifactRepository.url(s: String) {
+}
+
 pluginManagement {
     repositories {
         google {
@@ -11,11 +14,17 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
+    }
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") } // Thêm JitPack repository vào danh sách các kho lưu trữ Maven mà Gradle sử dụng để tìm kiếm và tải xuống các dependency cho project
     }
 }
 

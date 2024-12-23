@@ -1,5 +1,6 @@
 package com.example.road_pothole_detection_13.intro_ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,18 +13,20 @@ import com.example.road_pothole_detection_13.auth_ui.AuthActivity;
 import com.github.appintro.AppIntro;
 import com.github.appintro.AppIntroFragment;
 
-public class FirstTime extends AppIntro {
+public class FirstLaunchActivity extends AppIntro {
     private boolean tutorialCompleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addSlide(AppIntroFragment.newInstance("Hey", "This is Inside Android", R.drawable.intro1, getResources().getColor(R.color.light_blue_400)));
-        addSlide(AppIntroFragment.newInstance("What we do?", "We detect pothole in your route", R.drawable.intro2, getResources().getColor(R.color.gray_400)));
-        addSlide(AppIntroFragment.newInstance("Is it benefit?", "We will alert when you close with pothole", R.drawable.intro3, getResources().getColor(R.color.gray_400)));
-        addSlide(AppIntroFragment.newInstance("What do we have", "Safe and easy to use", R.drawable.intro4, getResources().getColor(R.color.black)));
+        addSlide(AppIntroFragment.newInstance("Hello", "Welcome to our application", R.drawable.intro1, getResources().getColor(R.color.light_blue_400)));
+        addSlide(AppIntroFragment.newInstance("What do we do?", "We detect pothole in your route", R.drawable.intro2, getResources().getColor(R.color.gray_400)));
+        addSlide(AppIntroFragment.newInstance("How can we do that?", "We alert you when you drove over potholes", R.drawable.intro3, getResources().getColor(R.color.gray_400)));
+        addSlide(AppIntroFragment.newInstance("Why do you should use our app?", "It's simple and easy to use", R.drawable.intro4, getResources().getColor(R.color.black)));
         setSkipButtonEnabled(true);
+        setSkipText("Skip");
+        setDoneText("Let's go");
     }
 
     @Override

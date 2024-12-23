@@ -1,14 +1,13 @@
-package com.example.road_pothole_detection_13;
+package com.example.road_pothole_detection_13.app_ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.WindowInsets;
-import android.view.WindowInsetsController;
-import android.view.WindowManager;
 
+import com.example.road_pothole_detection_13.NetworkUtils;
+import com.example.road_pothole_detection_13.R;
 import com.example.road_pothole_detection_13.auth_ui.AuthActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

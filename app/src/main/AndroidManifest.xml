@@ -34,10 +34,10 @@
             android:name=".app_ui.map.PotholeDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".app_ui.MainActivity"
             android:exported="false" />
         <activity
-            android:name=".intro_ui.FirstTime"
+            android:name=".intro_ui.FirstLaunchActivity"
             android:exported="false" />
         <activity
             android:name=".intro_ui.IntroActivity"

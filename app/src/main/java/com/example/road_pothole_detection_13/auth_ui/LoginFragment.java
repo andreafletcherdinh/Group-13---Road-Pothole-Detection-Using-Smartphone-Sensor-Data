@@ -24,7 +24,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.road_pothole_detection_13.MainActivity;
+import com.example.road_pothole_detection_13.app_ui.MainActivity;
 import com.example.road_pothole_detection_13.R;
 
 import org.json.JSONException;

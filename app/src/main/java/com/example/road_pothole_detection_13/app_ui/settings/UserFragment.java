@@ -16,6 +16,8 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -29,6 +31,9 @@ import com.example.road_pothole_detection_13.NetworkUtils;
 import com.example.road_pothole_detection_13.R;
 import com.example.road_pothole_detection_13.auth_ui.AuthActivity;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -99,16 +104,12 @@ public class UserFragment extends Fragment {
 
         previewImageView = view.findViewById(R.id.userAvatar_ImageView);
 
-        // Update data
-        updateData();
-
         // Khởi tạo ActivityResultLauncher
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         selectedImageUri = result.getData().getData();
-                        previewImageView.setImageURI(selectedImageUri);
                         uploadImage();
                     }
                 }
@@ -184,6 +185,19 @@ public class UserFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Lấy FragmentManager
+        //FragmentManager fragmentManager = getParentFragmentManager();
+
+        // Tạo lại Fragment
+        //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        //fragmentTransaction.detach(this).attach(this).commit();
+
+        getUserData();
+    }
+
     private void OpenSettingsHostActivity(String fragmentName) {
         String fullName = getActivity().getIntent().getStringExtra("fullName");
         String email = getActivity().getIntent().getStringExtra("email");
@@ -207,7 +221,6 @@ public class UserFragment extends Fragment {
 
     private void updateData() {
         Intent intent = getActivity().getIntent();
-
         // Name
         String fullName = intent.getStringExtra("fullName");
         TextView fullNameTextView = getView().findViewById(R.id.fullNameTextView);
@@ -220,6 +233,45 @@ public class UserFragment extends Fragment {
         Picasso.get()
                 .load(photoUrl)
                 .into(previewImageView);
+    }
+
+    void getUserData() {
+        String url = "http://diddysfreakoffparty.online:3000/api/user/profile";
+        String token = getActivity().getIntent().getStringExtra("accessToken");
+        NetworkUtils.sendGetRequestWithAuthorization(getContext(), url, token, new NetworkUtils.ResponseCallback() {
+            @Override
+            public void onSuccess(String response) {
+                try {
+                    JSONObject responseJson = new JSONObject(response);
+                    JSONObject dataJson = responseJson.getJSONObject("data");
+                    String fullName = dataJson.getString("fullName");
+                    String email = dataJson.getString("email");
+                    String photo = dataJson.getString("photo");
+                    String birthDay = dataJson.getString("birthDay");
+                    String gender = dataJson.getString("gender");
+                    String address = dataJson.getString("address");
+
+                    Intent intent = getActivity().getIntent();
+                    intent.putExtra("fullName", fullName);
+                    intent.putExtra("email", email);
+                    intent.putExtra("photo", photo);
+                    intent.putExtra("birthDay", birthDay);
+                    intent.putExtra("gender", gender);
+                    intent.putExtra("address", address);
+                    intent.putExtra("accessToken", token);
+
+                    updateData();
+
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                showErrorDialog("Error", "Connection error. Please login again");
+            }
+        });
     }
 
     private void checkPermissionAndPickImage() {
@@ -259,6 +311,19 @@ public class UserFragment extends Fragment {
                             Picasso.get()
                                     .load(selectedImageUri)
                                     .into(previewImageView);
+
+                            // Cập nhật URL ảnh
+                            try {
+                                JSONObject bodyObject = new JSONObject(response);
+                                JSONObject dataObject = bodyObject.getJSONObject("data");
+                                String newPhotoURL = dataObject.getString("photo");
+                                // Cập nhật photo URL
+                                Intent intent = getActivity().getIntent();
+                                intent.putExtra("photo", newPhotoURL);
+
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
 
                         @Override

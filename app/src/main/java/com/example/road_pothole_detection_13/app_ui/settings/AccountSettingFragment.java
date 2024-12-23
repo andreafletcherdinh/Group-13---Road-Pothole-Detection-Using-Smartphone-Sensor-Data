@@ -1,5 +1,7 @@
 package com.example.road_pothole_detection_13.app_ui.settings;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +12,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
@@ -30,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.road_pothole_detection_13.NetworkUtils;
 import com.example.road_pothole_detection_13.R;
+import com.example.road_pothole_detection_13.app_ui.MainActivity;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -112,14 +116,13 @@ public class AccountSettingFragment extends Fragment {
         updateData();
 
         // Change avatar
-        previewImageView = view.findViewById(R.id.accountSetting_changeAvatarImageView);
+        previewImageView = view.findViewById(R.id.accountSetting_avatarImageView);
         // Khởi tạo ActivityResultLauncher
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                         selectedImageUri = result.getData().getData();
-                        previewImageView.setImageURI(selectedImageUri);
                         uploadImage();
                     }
                 }

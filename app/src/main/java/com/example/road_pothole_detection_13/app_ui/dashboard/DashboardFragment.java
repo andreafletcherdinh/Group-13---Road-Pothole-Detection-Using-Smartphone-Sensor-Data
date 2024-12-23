@@ -89,6 +89,17 @@ public class DashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Initialize charts sau khi view đã được tạo
+        //initializeCharts();
+
+        // Load data
+        //loadPotholeData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Initialize charts sau khi view đã được tạo
         initializeCharts();
 
         // Load data

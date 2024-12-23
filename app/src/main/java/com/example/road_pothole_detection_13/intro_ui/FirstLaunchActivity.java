@@ -20,10 +20,10 @@ public class FirstLaunchActivity extends AppIntro {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addSlide(AppIntroFragment.newInstance("Hello", "Welcome to our application", R.drawable.intro1, getResources().getColor(R.color.light_blue_400)));
-        addSlide(AppIntroFragment.newInstance("What do we do?", "We detect pothole in your route", R.drawable.intro2, getResources().getColor(R.color.gray_400)));
-        addSlide(AppIntroFragment.newInstance("How can we do that?", "We alert you when you drove over potholes", R.drawable.intro3, getResources().getColor(R.color.gray_400)));
-        addSlide(AppIntroFragment.newInstance("Why do you should use our app?", "It's simple and easy to use", R.drawable.intro4, getResources().getColor(R.color.black)));
+        addSlide(AppIntroFragment.newInstance("Welcome!", "Discover the ultimate pothole detection solution for your journey.", R.drawable.intro1, getResources().getColor(R.color.light_blue_400)));
+        addSlide(AppIntroFragment.newInstance("What do we do?", "Our app helps you detect and avoid potholes on any road.", R.drawable.intro2, getResources().getColor(R.color.purple_200)));
+        addSlide(AppIntroFragment.newInstance("Why is it beneficial?", "Get timely alerts when you're approaching a pothole to ensure maximum safety.", R.drawable.intro3, getResources().getColor(R.color.gray_400)));
+        addSlide(AppIntroFragment.newInstance("Why choose us?", "A user-friendly app that's easy to use and keeps you safer on the road.", R.drawable.intro4, getResources().getColor(R.color.teal_200)));
         setSkipButtonEnabled(true);
         setSkipText("Skip");
         setDoneText("Let's go");
